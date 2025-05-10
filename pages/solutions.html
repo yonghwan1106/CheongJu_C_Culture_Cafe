@@ -1,0 +1,1795 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>개선방안 | 청주 카페의 재발견</title>
+    <meta name="description" content="동네별 '일상문화카페' 지정 및 운영을 통한 청주시 문화 인프라 개선방안">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Montserrat:wght@600;700&family=Open+Sans&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <!-- AOS (Animate On Scroll) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- D3.js for advanced visualizations -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <style>
+        /* Custom styles */
+        :root {
+            --cafe-brown: #8B4513;
+            --cheongju-blue: #1E88E5;
+            --cream-bg: #FFF8E1;
+            --accent-orange: #FF5722;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', 'Open Sans', sans-serif;
+            background-color: var(--cream-bg);
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Noto Sans KR', 'Montserrat', sans-serif;
+            font-weight: 700;
+        }
+        
+        .highlight {
+            color: var(--accent-orange);
+            font-weight: 500;
+        }
+        
+        .btn-primary {
+            background-color: var(--cheongju-blue);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #1565C0;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: var(--cafe-brown);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #6D370F;
+            transform: translateY(-2px);
+        }
+
+        .section-divider {
+            height: 4px;
+            background: linear-gradient(90deg, var(--cafe-brown), var(--cheongju-blue));
+            margin: 3rem 0;
+            border-radius: 2px;
+        }
+
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Nav styles */
+        .nav-link {
+            position: relative;
+            padding-bottom: 3px;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent-orange);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* Solution indicator */
+        .solution-indicator {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .solution-indicator .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+        
+        .solution-indicator .line {
+            flex-grow: 1;
+            height: 3px;
+        }
+        
+        /* Timeline styles */
+        .timeline {
+            position: relative;
+            margin: 2rem 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--cheongju-blue);
+            border-radius: 2px;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-left: 2rem;
+            padding-bottom: 2rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.5rem;
+            top: 0.5rem;
+            width: 1rem;
+            height: 1rem;
+            background: white;
+            border: 3px solid var(--cheongju-blue);
+            border-radius: 50%;
+        }
+        
+        /* Program styles */
+        .program-card {
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+        }
+        
+        .program-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+        }
+        
+        .monday-program::before {
+            background-color: #4CAF50;
+        }
+        
+        .wednesday-program::before {
+            background-color: #9C27B0;
+        }
+        
+        .friday-program::before {
+            background-color: #FF9800;
+        }
+        
+        .weekend-program::before {
+            background-color: #3F51B5;
+        }
+        
+        /* Selection criteria steps */
+        .selection-step {
+            position: relative;
+            counter-increment: step-counter;
+        }
+        
+        .selection-step::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: -40px;
+            top: 0;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--cheongju-blue);
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header class="bg-white shadow-md fixed w-full z-10">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="../index.html" class="flex items-center">
+                    <div class="w-12 h-12 bg-[#8B4513] rounded-full flex items-center justify-center text-white font-bold text-lg mr-3">C</div>
+                    <h1 class="text-xl font-bold">청주 카페의 <span class="text-[#1E88E5]">재발견</span></h1>
+                </a>
+            </div>
+            <nav class="hidden md:flex space-x-6">
+                <a href="../index.html#overview" class="nav-link text-gray-800 hover:text-[#FF5722]">개요</a>
+                <a href="report.html" class="nav-link text-gray-800 hover:text-[#FF5722] font-medium">키워드 분석</a>
+                <a href="problems.html" class="nav-link text-gray-800 hover:text-[#FF5722] font-medium">현황 및 문제점</a>
+                <a href="solutions.html" class="nav-link text-gray-800 hover:text-[#FF5722]">개선방안</a>
+                <a href="effects.html" class="nav-link text-gray-800 hover:text-[#FF5722]">기대효과</a>
+                <a href="implementation.html" class="nav-link text-gray-800 hover:text-[#FF5722]">실행계획</a>
+            </nav>
+            <button class="md:hidden focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+        <!-- Mobile menu (hidden by default) -->
+        <div class="hidden mobile-menu md:hidden">
+            <ul class="bg-white px-4 py-2">
+                <li><a href="../index.html#overview" class="block py-2 text-gray-800 hover:text-[#FF5722]">개요</a></li>
+                <li><a href="report.html" class="block py-2 text-gray-800 hover:text-[#FF5722] font-medium">키워드 분석</a></li>
+                <li><a href="problems.html" class="block py-2 text-gray-800 hover:text-[#FF5722] font-medium">현황 및 문제점</a></li>
+                <li><a href="solutions.html" class="block py-2 text-gray-800 hover:text-[#FF5722]">개선방안</a></li>
+                <li><a href="effects.html" class="block py-2 text-gray-800 hover:text-[#FF5722]">기대효과</a></li>
+                <li><a href="implementation.html" class="block py-2 text-gray-800 hover:text-[#FF5722]">실행계획</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Page Title Section -->
+    <section class="pt-24 pb-8 md:pt-32 md:pb-12 bg-gradient-to-r from-[#8B4513]/10 to-[#1E88E5]/10">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4" data-aos="fade-up">개선방안</h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="100">
+                청주시 동네별 '일상문화카페' 지정 및 운영을 통해 생활 밀착형 문화 인프라를 구축합니다.
+            </p>
+        </div>
+    </section>
+
+    <!-- Solution Overview Section -->
+    <section class="py-8">
+        <div class="container mx-auto px-4">
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+                <div class="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8">
+                    <div class="w-20 h-20 md:w-24 md:h-24 rounded-full bg-[#1E88E5]/10 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-12 h-12 text-[#1E88E5]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold mb-4">3가지 핵심 개선방안</h2>
+                        <ul class="space-y-3">
+                            <li class="flex">
+                                <div class="solution-indicator">
+                                    <div class="dot bg-[#1E88E5]"></div>
+                                    <div class="line bg-[#1E88E5]/20"></div>
+                                </div>
+                                <span class="font-medium ml-2">동네별 '일상문화카페' 지정 및 운영 체계</span>
+                            </li>
+                            <li class="flex">
+                                <div class="solution-indicator">
+                                    <div class="dot bg-[#8B4513]"></div>
+                                    <div class="line bg-[#8B4513]/20"></div>
+                                </div>
+                                <span class="font-medium ml-2">주민 참여형 거버넌스 구축</span>
+                            </li>
+                            <li class="flex">
+                                <div class="solution-indicator">
+                                    <div class="dot bg-[#FF5722]"></div>
+                                    <div class="line bg-[#FF5722]/20"></div>
+                                </div>
+                                <span class="font-medium ml-2">단계별 실행 계획 및 지속가능성 확보</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="text-gray-600">
+                    본 제안은 기존 카페 인프라를 활용한 동네 단위 문화 공간 조성으로, 생활 밀착형 문화 서비스를 제공합니다. 각 행정동별 1개소씩 일상문화카페를 지정하여 지역 주민들이 도보로 접근 가능한 문화 인프라를 구축하고, 주민 참여형 운영을 통해 지속가능성을 확보합니다.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution 1: Cafe Designation Section -->
+    <section id="cafe-designation" class="py-12">
+        <div class="container mx-auto px-4">
+            <div class="solution-indicator mb-6">
+                <div class="dot bg-[#1E88E5]"></div>
+                <div class="line bg-[#1E88E5]/20"></div>
+                <h2 class="text-3xl font-bold ml-4">동네별 '일상문화카페' 지정 및 운영 체계</h2>
+            </div>
+            
+            <!-- Selection Criteria -->
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-6">1-1. 대상 및 선정 기준</h3>
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="lg:w-1/2">
+                        <div class="relative pl-12">
+                            <h4 class="text-lg font-semibold mb-4 bg-[#1E88E5]/10 p-2 rounded-lg inline-block">【지정 규모】</h4>
+                            <ul class="space-y-2 text-gray-700 mb-6">
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#1E88E5] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>1차년도: 각 구별 5개소씩, 총 20개소 시범 운영</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#1E88E5] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>2차년도: 10개소 추가 지정하여 총 30개소로 확대</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#1E88E5] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>행정동 인구수, 기존 문화시설 분포 등을 고려한 우선순위 선정</span>
+                                </li>
+                            </ul>
+                            
+                            <h4 class="text-lg font-semibold mb-4 bg-[#1E88E5]/10 p-2 rounded-lg inline-block">【신청 자격】</h4>
+                            <ul class="space-y-2 text-gray-700 mb-6">
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#1E88E5] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>사업자등록 후 1년 이상 운영 중인 청주시 소재 카페</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#1E88E5] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>실내 좌석 20석 이상, 최소 5평(16.5㎡) 이상의 문화활동 가능 공간 보유</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#1E88E5] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>최소 주 5일, 저녁 8시까지 운영 가능한 업체</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#1E88E5] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>월 최소 4회 이상 문화 프로그램 운영 의지가 있는 사업자</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="lg:w-1/2">
+                        <h4 class="text-lg font-semibold mb-4 bg-[#1E88E5]/10 p-2 rounded-lg inline-block">【선정 평가 기준】</h4>
+                        <div class="mb-6" style="position: relative; height: 400px;">
+                            <canvas id="selectionCriteriaChart" height="400px"></canvas>
+                            <p class="text-sm text-gray-500 mt-2 text-center">* 일상문화카페 선정 평가 기준 및 배점</p>
+                        </div>
+                        
+                        <h4 class="text-lg font-semibold mb-4 bg-[#1E88E5]/10 p-2 rounded-lg inline-block">【선정 과정】</h4>
+                        <div class="ml-10 relative">
+                            <div class="border-l-2 border-[#1E88E5] absolute h-full left-0 top-0"></div>
+                            <div class="selection-step ml-10 mb-4 pb-4">
+                                <h5 class="font-medium">공고 및 신청서 접수</h5>
+                                <p class="text-gray-600">21일간 온라인/오프라인 접수</p>
+                            </div>
+                            <div class="selection-step ml-10 mb-4 pb-4">
+                                <h5 class="font-medium">서류심사 및 현장실사</h5>
+                                <p class="text-gray-600">공간 적합성, 접근성 평가 (14일)</p>
+                            </div>
+                            <div class="selection-step ml-10 mb-4 pb-4">
+                                <h5 class="font-medium">운영자 인터뷰 및 프레젠테이션</h5>
+                                <p class="text-gray-600">운영 계획, 지역 연계성 평가 (7일)</p>
+                            </div>
+                            <div class="selection-step ml-10">
+                                <h5 class="font-medium">최종 선정 및 협약 체결</h5>
+                                <p class="text-gray-600">구별 5개소, 총 20개소 선정 (7일)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Support Contents -->
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-6">1-2. 지원 내용 및 조건</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4 bg-[#1E88E5]/10 p-2 rounded-lg inline-block">【공간 개선 지원】</h4>
+                        <div class="bg-white border border-gray-200 rounded-lg p-4 mb-6">
+                            <h5 class="font-medium mb-3">기본 시설 지원 (1회, 최대 200만원)</h5>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#1E88E5] mt-2 mr-2"></div>
+                                    <span>소규모 공연용 이동식 무대(1.8m×1.2m) 또는 전시용 레일/조명</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#1E88E5] mt-2 mr-2"></div>
+                                    <span>이동식 음향 장비(스피커, 무선마이크 1세트)</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#1E88E5] mt-2 mr-2"></div>
+                                    <span>빔프로젝터/스크린 또는 대형 모니터(1대)</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#1E88E5] mt-2 mr-2"></div>
+                                    <span>가변형 좌석/테이블 세트(필요시)</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-white border border-gray-200 rounded-lg p-4">
+                            <h5 class="font-medium mb-3">공간 세팅 컨설팅 서비스</h5>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#1E88E5] mt-2 mr-2"></div>
+                                    <span>전문 공간디자이너의 효율적 공간 활용 컨설팅(2회)</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#1E88E5] mt-2 mr-2"></div>
+                                    <span>다목적 활용을 위한 공간 재배치 방안 제시</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#1E88E5] mt-2 mr-2"></div>
+                                    <span>음향/조명 최적화 세팅 지원</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4 bg-[#1E88E5]/10 p-2 rounded-lg inline-block">【프로그램 운영비 지원】</h4>
+                        <div class="bg-white border border-gray-200 rounded-lg p-4 mb-6">
+                            <h5 class="font-medium mb-3">기본 운영비: 월 30만원 정액 지원 (연간 360만원)</h5>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#1E88E5] mt-2 mr-2"></div>
+                                    <span>문화 프로그램 운영 시 강사/아티스트 초청 비용(회당 최대 10만원)</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#1E88E5] mt-2 mr-2"></div>
+                                    <span>프로그램 홍보물 제작비(월 5만원 한도)</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#1E88E5] mt-2 mr-2"></div>
+                                    <span>소모품 및 재료비(월 5만원 한도)</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <h4 class="text-lg font-semibold mb-4 bg-[#1E88E5]/10 p-2 rounded-lg inline-block">【운영 조건】</h4>
+                        <div class="bg-white border border-gray-200 rounded-lg p-4">
+                            <h5 class="font-medium mb-3">필수 운영 사항</h5>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#1E88E5] mt-2 mr-2"></div>
+                                    <span>월 최소 4회 이상 문화 프로그램 진행(주 1회 권장)</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#1E88E5] mt-2 mr-2"></div>
+                                    <span>연간 운영계획서 및 결과보고서 제출</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#1E88E5] mt-2 mr-2"></div>
+                                    <span>분기별 네트워크 모임 참석</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#1E88E5] mt-2 mr-2"></div>
+                                    <span>'청주시 일상문화카페' 통합 홍보 플랫폼 참여</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8">
+                    <h4 class="text-lg font-semibold mb-4 text-center">카페 공간 활용 예시</h4>
+                    <div class="flex justify-center">
+                        <svg viewBox="0 0 800 350" class="w-full max-w-2xl">
+                            <!-- Cafe Layout -->
+                            <rect x="50" y="50" width="700" height="250" fill="#f5f5f5" stroke="#ccc" />
+                            
+                            <!-- Entrance -->
+                            <rect x="375" y="300" width="50" height="10" fill="#8B4513" />
+                            <text x="400" y="325" text-anchor="middle" font-size="12">입구</text>
+                            
+                            <!-- Counter Area -->
+                            <rect x="50" y="50" width="150" height="100" fill="#D2B48C" />
+                            <text x="125" y="100" text-anchor="middle" font-size="14" fill="white">카운터</text>
+                            
+                            <!-- Regular Seating -->
+                            <g>
+                                <rect x="250" y="70" width="30" height="30" fill="#D2B48C" rx="2" />
+                                <circle cx="265" cy="55" r="8" fill="#888" />
+                                <circle cx="265" cy="115" r="8" fill="#888" />
+                                
+                                <rect x="300" y="70" width="30" height="30" fill="#D2B48C" rx="2" />
+                                <circle cx="315" cy="55" r="8" fill="#888" />
+                                <circle cx="315" cy="115" r="8" fill="#888" />
+                                
+                                <rect x="350" y="70" width="30" height="30" fill="#D2B48C" rx="2" />
+                                <circle cx="365" cy="55" r="8" fill="#888" />
+                                <circle cx="365" cy="115" r="8" fill="#888" />
+                                
+                                <rect x="400" y="70" width="30" height="30" fill="#D2B48C" rx="2" />
+                                <circle cx="415" cy="55" r="8" fill="#888" />
+                                <circle cx="415" cy="115" r="8" fill="#888" />
+                            </g>
+                            
+                            <!-- Flexible Cultural Space Area -->
+                            <rect x="480" y="60" width="250" height="180" fill="#E3F2FD" stroke="#1E88E5" stroke-dasharray="5,5" />
+                            <text x="605" y="50" text-anchor="middle" font-size="14" font-weight="bold" fill="#1E88E5">문화활동 가능 공간</text>
+                            
+                            <!-- Example: Small Stage Setup -->
+                            <rect x="520" y="100" width="180" height="100" fill="#fff" stroke="#1E88E5" />
+                            <text x="610" y="150" text-anchor="middle" font-size="14">이동식 무대 설치 가능</text>
+                            <text x="610" y="170" text-anchor="middle" font-size="12">(1.8m × 1.2m)</text>
+                            
+                            <!-- Movable Chairs -->
+                            <circle cx="540" cy="230" r="8" fill="#1E88E5" opacity="0.6" />
+                            <circle cx="560" cy="230" r="8" fill="#1E88E5" opacity="0.6" />
+                            <circle cx="580" cy="230" r="8" fill="#1E88E5" opacity="0.6" />
+                            <circle cx="600" cy="230" r="8" fill="#1E88E5" opacity="0.6" />
+                            <circle cx="620" cy="230" r="8" fill="#1E88E5" opacity="0.6" />
+                            <circle cx="640" cy="230" r="8" fill="#1E88E5" opacity="0.6" />
+                            <circle cx="660" cy="230" r="8" fill="#1E88E5" opacity="0.6" />
+                            <circle cx="680" cy="230" r="8" fill="#1E88E5" opacity="0.6" />
+                            
+                            <text x="610" y="260" text-anchor="middle" font-size="12">가변형 좌석 배치</text>
+                            
+                            <!-- Legend -->
+                            <rect x="50" y="280" width="15" height="15" fill="#D2B48C" />
+                            <text x="75" y="292" font-size="12" text-anchor="start">일반 카페 공간</text>
+                            
+                            <rect x="160" y="280" width="15" height="15" fill="#E3F2FD" stroke="#1E88E5" stroke-dasharray="5,5" />
+                            <text x="185" y="292" font-size="12" text-anchor="start">문화활동 공간</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Program Model -->
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-6">1-3. 맞춤형 프로그램 운영 모델</h3>
+                
+                <h4 class="text-lg font-semibold mb-5">【요일별 특화 프로그램】</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                    <!-- Monday Program -->
+                    <div class="bg-white border rounded-lg shadow-sm program-card monday-program">
+                        <div class="p-4">
+                            <div class="flex items-center mb-3">
+                                <div class="w-8 h-8 bg-[#4CAF50] rounded-full flex items-center justify-center mr-3">
+                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                    </svg>
+                                </div>
+                                <h5 class="font-medium">월요 북클럽</h5>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">독서모임, 작가와의 만남, 책 교환 이벤트</p>
+                            <div class="flex justify-between text-xs text-gray-500">
+                                <span>운영: 매주 월요일 저녁 7-9시</span>
+                                <span>정원: 5-15명</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Wednesday Program -->
+                    <div class="bg-white border rounded-lg shadow-sm program-card wednesday-program">
+                        <div class="p-4">
+                            <div class="flex items-center mb-3">
+                                <div class="w-8 h-8 bg-[#9C27B0] rounded-full flex items-center justify-center mr-3">
+                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                                <h5 class="font-medium">수요 아트데이</h5>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">소규모 전시, 예술 워크숍, 작품 감상회</p>
+                            <div class="flex justify-between text-xs text-gray-500">
+                                <span>운영: 매주 수요일, 상설 전시</span>
+                                <span>형태: 전시/워크숍</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Friday Program -->
+                    <div class="bg-white border rounded-lg shadow-sm program-card friday-program">
+                        <div class="p-4">
+                            <div class="flex items-center mb-3">
+                                <div class="w-8 h-8 bg-[#FF9800] rounded-full flex items-center justify-center mr-3">
+                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
+                                    </svg>
+                                </div>
+                                <h5 class="font-medium">금요 어쿠스틱</h5>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">소규모 공연, 음악 감상회, 오픈마이크</p>
+                            <div class="flex justify-between text-xs text-gray-500">
+                                <span>운영: 월 2회 금요일 저녁 7-9시</span>
+                                <span>관객: 20-30명</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Weekend Program -->
+                    <div class="bg-white border rounded-lg shadow-sm program-card weekend-program">
+                        <div class="p-4">
+                            <div class="flex items-center mb-3">
+                                <div class="w-8 h-8 bg-[#3F51B5] rounded-full flex items-center justify-center mr-3">
+                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path>
+                                    </svg>
+                                </div>
+                                <h5 class="font-medium">주말 메이커스</h5>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">생활 공예, DIY 워크숍, 취미 클래스</p>
+                            <div class="flex justify-between text-xs text-gray-500">
+                                <span>운영: 매주 토요일 오후 2-4시</span>
+                                <span>형태: 원데이 클래스</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h4 class="text-lg font-semibold mb-5">【대상별 맞춤 프로그램】</h4>
+                <div class="flex flex-col md:flex-row gap-6 mb-8">
+                    <!-- Target Group Programs -->
+                    <div class="md:w-1/3 bg-white border rounded-lg shadow-sm p-4">
+                        <div class="flex items-center mb-3">
+                            <svg class="w-6 h-6 text-[#8B4513] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                            <h5 class="font-medium">시니어 대상: '실버카페타임'</h5>
+                        </div>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li class="flex items-start">
+                                <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                <span>평일 오전 시간대(10-12시) 활용, 주 1회 운영</span>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                <span>스마트폰 활용법, 건강 정보 강좌, 시니어 담화모임 등</span>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                <span>65세 이상 음료 할인(20%) 혜택 연계</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="md:w-1/3 bg-white border rounded-lg shadow-sm p-4">
+                        <div class="flex items-center mb-3">
+                            <svg class="w-6 h-6 text-[#8B4513] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <h5 class="font-medium">영유아 가족 대상: '키즈 프렌들리 타임'</h5>
+                        </div>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li class="flex items-start">
+                                <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                <span>평일 오후(3-5시) 시간대 활용, 주 1-2회 운영</span>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                <span>그림책 읽기, 간단한 놀이 활동, 엄마들의 소통 공간</span>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                <span>키즈존 임시 설치, 어린이 간식 메뉴 개발</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="md:w-1/3 bg-white border rounded-lg shadow-sm p-4">
+                        <div class="flex items-center mb-3">
+                            <svg class="w-6 h-6 text-[#8B4513] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                            <h5 class="font-medium">청년 대상: '청춘살롱'</h5>
+                        </div>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li class="flex items-start">
+                                <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                <span>평일 저녁 또는 주말 시간대, 월 2회 운영</span>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                <span>취/창업 정보 공유, 관심사 기반 소셜 모임, 취미 클럽</span>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                <span>청년 크리에이터 활동 발표 및 네트워킹</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h4 class="text-lg font-semibold mb-5">【지역 특화 프로그램】</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white rounded-lg shadow-sm border p-4">
+                        <h5 class="font-medium mb-2">동네 역사/문화 탐방</h5>
+                        <p class="text-sm text-gray-600">사전 모임 → 탐방 → 공유회 형태로 지역 자원 재발견</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm border p-4">
+                        <h5 class="font-medium mb-2">로컬 크리에이터 체험</h5>
+                        <p class="text-sm text-gray-600">지역 장인과 함께하는 특산품 만들기 체험</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm border p-4">
+                        <h5 class="font-medium mb-2">동네 어르신 구술사</h5>
+                        <p class="text-sm text-gray-600">지역 생활사 기록 및 세대 간 소통 프로젝트</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm border p-4">
+                        <h5 class="font-medium mb-2">세대 공감 프로그램</h5>
+                        <p class="text-sm text-gray-600">청소년-어르신 멘토링 등 세대 통합 활동</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution 2: Community Governance Section -->
+    <section id="community-governance" class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="solution-indicator mb-6">
+                <div class="dot bg-[#8B4513]"></div>
+                <div class="line bg-[#8B4513]/20"></div>
+                <h2 class="text-3xl font-bold ml-4">주민 참여형 거버넌스 구축</h2>
+            </div>
+            
+            <!-- Cultural Planning Group -->
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-6">2-1. 동네 문화기획단 운영</h3>
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="lg:w-1/2">
+                        <div class="relative pl-12">
+                            <h4 class="text-lg font-semibold mb-4 bg-[#8B4513]/10 p-2 rounded-lg inline-block">【구성 및 역할】</h4>
+                            <ul class="space-y-2 text-gray-700 mb-6">
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#8B4513] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>각 행정동별 5-7명의 주민 문화기획단 모집</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#8B4513] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <div>
+                                        <span>구성: 지역 주민, 문화예술 관계자, 대학생, 시니어 등 다양한 계층 포함</span>
+                                        <p class="text-sm text-gray-500 ml-2 mt-1">* 최소 청소년 1명, 시니어 1명 포함하여 세대 통합 구성</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#8B4513] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <div>
+                                        <span>주요 역할:</span>
+                                        <ul class="space-y-1 mt-1 ml-4 text-sm">
+                                            <li>- 해당 지역 일상문화카페 프로그램 기획 참여</li>
+                                            <li>- 지역 니즈 파악 및 프로그램 제안</li>
+                                            <li>- 지역 내 문화 자원 발굴 및 연계</li>
+                                            <li>- 프로그램 홍보 및 주민 참여 독려</li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                            
+                            <h4 class="text-lg font-semibold mb-4 bg-[#8B4513]/10 p-2 rounded-lg inline-block">【운영 방식】</h4>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#8B4513] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>분기별 정기 회의(월 1회) 진행</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#8B4513] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <div>
+                                        <span>문화기획 역량강화 교육(연 4회)</span>
+                                        <ul class="space-y-1 mt-1 ml-4 text-sm">
+                                            <li>- 문화기획 기초, 예산 관리, 홍보 전략, 평가 방법 등</li>
+                                            <li>- 타 지역 우수 사례 탐방 및 벤치마킹</li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#8B4513] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>활동비 지원: 회의 참석 수당(회당 2만원), 기획비(프로그램당 10만원)</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#8B4513] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>연간 활동 결과 발표회 및 우수 기획단 시상</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="lg:w-1/2 flex flex-col justify-center">
+                        <div class="bg-[#FFF3E0] p-5 rounded-lg">
+                            <h4 class="font-medium mb-3 text-center">동네 문화기획단 구성 예시</h4>
+                            <div class="flex justify-center mb-4">
+                                <svg viewBox="0 0 400 300" class="w-full max-w-md">
+                                    <!-- Central Hub -->
+                                    <circle cx="200" cy="150" r="60" fill="#8B4513" opacity="0.2" stroke="#8B4513" />
+                                    <text x="200" y="150" text-anchor="middle" font-size="14" font-weight="bold">동네 문화기획단</text>
+                                    <text x="200" y="170" text-anchor="middle" font-size="12">(5-7명)</text>
+                                    
+                                    <!-- Group Members -->
+                                    <g>
+                                        <!-- Resident -->
+                                        <circle cx="140" cy="70" r="30" fill="#FFF3E0" stroke="#8B4513" />
+                                        <text x="140" y="70" text-anchor="middle" font-size="12" font-weight="bold">일반 주민</text>
+                                        <text x="140" y="85" text-anchor="middle" font-size="10">(2-3명)</text>
+                                        <line x1="158" y1="95" x2="180" y2="120" stroke="#8B4513" stroke-width="2" />
+                                    </g>
+                                    
+                                    <g>
+                                        <!-- Senior -->
+                                        <circle cx="260" cy="70" r="30" fill="#FFF3E0" stroke="#8B4513" />
+                                        <text x="260" y="70" text-anchor="middle" font-size="12" font-weight="bold">시니어</text>
+                                        <text x="260" y="85" text-anchor="middle" font-size="10">(최소 1명)</text>
+                                        <line x1="242" y1="95" x2="220" y2="120" stroke="#8B4513" stroke-width="2" />
+                                    </g>
+                                    
+                                    <g>
+                                        <!-- Artist -->
+                                        <circle cx="100" cy="180" r="30" fill="#FFF3E0" stroke="#8B4513" />
+                                        <text x="100" y="180" text-anchor="middle" font-size="12" font-weight="bold">지역 예술가</text>
+                                        <text x="100" y="195" text-anchor="middle" font-size="10">(1명)</text>
+                                        <line x1="128" y1="170" x2="150" y2="160" stroke="#8B4513" stroke-width="2" />
+                                    </g>
+                                    
+                                    <g>
+                                        <!-- Student -->
+                                        <circle cx="300" cy="180" r="30" fill="#FFF3E0" stroke="#8B4513" />
+                                        <text x="300" y="180" text-anchor="middle" font-size="12" font-weight="bold">대학생</text>
+                                        <text x="300" y="195" text-anchor="middle" font-size="10">(1명)</text>
+                                        <line x1="272" y1="170" x2="250" y2="160" stroke="#8B4513" stroke-width="2" />
+                                    </g>
+                                    
+                                    <g>
+                                        <!-- Teen -->
+                                        <circle cx="200" cy="250" r="30" fill="#FFF3E0" stroke="#8B4513" />
+                                        <text x="200" y="250" text-anchor="middle" font-size="12" font-weight="bold">청소년</text>
+                                        <text x="200" y="265" text-anchor="middle" font-size="10">(최소 1명)</text>
+                                        <line x1="200" y1="220" x2="200" y2="190" stroke="#8B4513" stroke-width="2" />
+                                    </g>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 bg-white border border-gray-200 rounded-lg p-4">
+                            <h4 class="font-medium mb-3">기대 효과</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                    <span>주민 주도의 상향식(bottom-up) 문화 기획으로 지역 특성 반영</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                    <span>지역 내 다양한 계층 간 소통 및 협력 강화</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                    <span>시민의 문화 주체성 향상 및 문화 민주주의 실현</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                    <span>30개 동네 문화기획단 운영을 통해 약 150명의 시민 문화기획자 양성</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Cafe Network -->
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-6">2-2. 일상문화카페 네트워크 구축</h3>
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="lg:w-1/2">
+                        <div class="bg-white border border-gray-200 rounded-lg p-4 mb-6">
+                            <h4 class="font-medium mb-3">【네트워크 구성】</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                    <span>참여 카페 운영자 협의체: 월 1회 정기 모임</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                    <span>권역별 소모임: 구별 참여 카페 간 소통 채널</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                    <span>온라인 소통 플랫폼: 카카오톡 단체방, 공유 캘린더 등</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-white border border-gray-200 rounded-lg p-4 mb-6">
+                            <h4 class="font-medium mb-3">【공동 프로젝트】</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                    <div>
+                                        <span>분기별 테마 프로그램 공동 운영</span>
+                                        <ul class="space-y-1 mt-1 ml-4 text-sm">
+                                            <li>- 봄: '카페에서 만나는 봄' (4-5월)</li>
+                                            <li>- 여름: '카페 속 피서 문화' (7-8월)</li>
+                                            <li>- 가을: '카페 문화 수확제' (10-11월)</li>
+                                            <li>- 겨울: '카페에서 연말을' (12월)</li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                    <span>권역별 릴레이 프로그램 운영</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                    <span>연 1회 '청주 일상문화카페 페스티벌' 개최</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-white border border-gray-200 rounded-lg p-4">
+                            <h4 class="font-medium mb-3">【자원 공유 시스템】</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                    <span>공동 장비 대여 시스템 구축</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                    <span>콘텐츠 및 운영 노하우 공유 플랫폼 운영</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                    <span>강사/아티스트 풀 공동 관리</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="lg:w-1/2">
+                        <div class="bg-white rounded-lg overflow-hidden shadow-sm border mb-6">
+                            <div class="bg-[#8B4513]/10 p-3">
+                                <h4 class="font-medium">청주 일상문화카페 네트워크 구조</h4>
+                            </div>
+                            <div class="p-4">
+                                <svg viewBox="0 0 500 350" class="w-full">
+                                    <!-- Central Hub -->
+                                    <circle cx="250" cy="175" r="60" fill="#8B4513" opacity="0.2" stroke="#8B4513" />
+                                    <text x="250" y="170" text-anchor="middle" font-size="14" font-weight="bold">청주시</text>
+                                    <text x="250" y="190" text-anchor="middle" font-size="12">일상문화카페</text>
+                                    <text x="250" y="205" text-anchor="middle" font-size="12">협의체</text>
+                                    
+                                    <!-- Districts -->
+                                    <g>
+                                        <circle cx="120" cy="100" r="45" fill="#FFF3E0" stroke="#8B4513" />
+                                        <text x="120" y="95" text-anchor="middle" font-size="12" font-weight="bold">상당구</text>
+                                        <text x="120" y="115" text-anchor="middle" font-size="10">5개소</text>
+                                        <line x1="157" y1="126" x2="200" y2="150" stroke="#8B4513" stroke-width="2" />
+                                    </g>
+                                    
+                                    <g>
+                                        <circle cx="380" cy="100" r="45" fill="#FFF3E0" stroke="#8B4513" />
+                                        <text x="380" y="95" text-anchor="middle" font-size="12" font-weight="bold">서원구</text>
+                                        <text x="380" y="115" text-anchor="middle" font-size="10">5개소</text>
+                                        <line x1="343" y1="126" x2="300" y2="150" stroke="#8B4513" stroke-width="2" />
+                                    </g>
+                                    
+                                    <g>
+                                        <circle cx="120" cy="250" r="45" fill="#FFF3E0" stroke="#8B4513" />
+                                        <text x="120" y="245" text-anchor="middle" font-size="12" font-weight="bold">청원구</text>
+                                        <text x="120" y="265" text-anchor="middle" font-size="10">5개소</text>
+                                        <line x1="157" y1="225" x2="200" y2="200" stroke="#8B4513" stroke-width="2" />
+                                    </g>
+                                    
+                                    <g>
+                                        <circle cx="380" cy="250" r="45" fill="#FFF3E0" stroke="#8B4513" />
+                                        <text x="380" y="245" text-anchor="middle" font-size="12" font-weight="bold">흥덕구</text>
+                                        <text x="380" y="265" text-anchor="middle" font-size="10">5개소</text>
+                                        <line x1="343" y1="225" x2="300" y2="200" stroke="#8B4513" stroke-width="2" />
+                                    </g>
+                                    
+                                    <!-- Supporting Network -->
+                                    <g transform="translate(0,-20)">
+                                        <rect x="80" y="175" width="80" height="40" rx="5" fill="#E3F2FD" stroke="#1E88E5" />
+                                        <text x="120" y="185" text-anchor="middle" font-size="10" font-weight="bold">문화기획단</text>
+                                        <text x="120" y="200" text-anchor="middle" font-size="9">각 동별 5-7명</text>
+                                        <line x1="170" y1="195" x2="190" y2="195" stroke="#1E88E5" stroke-width="2" stroke-dasharray="5,3" />
+                                    </g>
+                                    
+                                    <g transform="translate(0,-20)">
+                                        <rect x="340" y="175" width="80" height="40" rx="5" fill="#E3F2FD" stroke="#1E88E5" />
+                                        <text x="380" y="185" text-anchor="middle" font-size="10" font-weight="bold">온라인 플랫폼</text>
+                                        <text x="380" y="200" text-anchor="middle" font-size="9">프로그램 공유</text>
+                                        <line x1="330" y1="195" x2="310" y2="195" stroke="#1E88E5" stroke-width="2" stroke-dasharray="5,3" />
+                                    </g>
+                                    
+                                    <g>
+                                        <rect x="225" y="40" width="50" height="40" rx="5" fill="#E3F2FD" stroke="#1E88E5" />
+                                        <text x="250" y="55" text-anchor="middle" font-size="10" font-weight="bold">청주시</text>
+                                        <text x="250" y="70" text-anchor="middle" font-size="9">지원·관리</text>
+                                        <line x1="250" y1="90" x2="250" y2="115" stroke="#1E88E5" stroke-width="2" stroke-dasharray="5,3" />
+                                    </g>
+                                    
+                                    <g>
+                                        <rect x="225" y="300" width="50" height="40" rx="5" fill="#E3F2FD" stroke="#1E88E5" />
+                                        <text x="250" y="315" text-anchor="middle" font-size="10" font-weight="bold">지역자원</text>
+                                        <text x="250" y="330" text-anchor="middle" font-size="9">연계·협력</text>
+                                        <line x1="250" y1="290" x2="250" y2="235" stroke="#1E88E5" stroke-width="2" stroke-dasharray="5,3" />
+                                    </g>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-[#FFF3E0] p-5 rounded-lg">
+                            <h4 class="font-medium mb-3 text-center">공동 프로젝트 예시: '일상문화카페 페스티벌'</h4>
+                            
+                            <div class="space-y-3 text-gray-700">
+                                <div class="flex">
+                                    <div class="w-16 shrink-0 font-medium">기간</div>
+                                    <div>10월 중 1주일(월-일)</div>
+                                </div>
+                                <div class="flex">
+                                    <div class="w-16 shrink-0 font-medium">참여</div>
+                                    <div>총 20개 일상문화카페 전체</div>
+                                </div>
+                                <div class="flex">
+                                    <div class="w-16 shrink-0 font-medium">콘텐츠</div>
+                                    <div>
+                                        <ul class="space-y-1 text-sm">
+                                            <li>• 카페별 특화 프로그램 동시 진행</li>
+                                            <li>• 스탬프 투어 운영(5개 이상 방문 시 기념품 증정)</li>
+                                            <li>• 우수 프로그램 쇼케이스(중앙 공간 활용)</li>
+                                            <li>• 시민 참여 이벤트(SNS 인증 등)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="w-16 shrink-0 font-medium">효과</div>
+                                    <div>
+                                        <ul class="space-y-1 text-sm">
+                                            <li>• 일상문화카페 인지도 확산</li>
+                                            <li>• 다양한 카페 체험 기회 제공</li>
+                                            <li>• 프로그램 사례 공유 및 확산</li>
+                                            <li>• 지역 전체의 문화 분위기 조성</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Branding & Promotion -->
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-6">2-3. 일상문화카페 브랜딩 및 홍보</h3>
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="lg:w-1/2">
+                        <div class="bg-white border border-gray-200 rounded-lg p-4 mb-6">
+                            <h4 class="font-medium mb-3">【통합 브랜드 개발】</h4>
+                            <div class="flex items-center mb-4">
+                                <div class="w-16 h-16 bg-[#8B4513] rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">C</div>
+                                <div>
+                                    <h5 class="font-medium">'C-Culture Café(씨컬처카페)' 통합 브랜드</h5>
+                                    <p class="text-sm text-gray-600">C는 Cheongju, Culture, Community, Creativity의 중의적 의미</p>
+                                </div>
+                            </div>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                    <span>로고, 색상, 폰트 등 통일된 브랜드 아이덴티티 개발</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                    <div>
+                                        <span>인증 표식 제작 및 배포</span>
+                                        <ul class="space-y-1 mt-1 ml-4 text-sm">
+                                            <li>- 출입구 부착용 인증 현판</li>
+                                            <li>- 테이블 스탠드, 메뉴판 등에 적용 가능한 브랜드 요소</li>
+                                            <li>- 직원 배지 또는 앞치마 등 유니폼 요소</li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-white border border-gray-200 rounded-lg p-4">
+                            <h4 class="font-medium mb-3">【통합 홍보 전략】</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                    <div>
+                                        <span>온라인 플랫폼 구축</span>
+                                        <ul class="space-y-1 mt-1 ml-4 text-sm">
+                                            <li>- 청주시 공식 홈페이지 내 전용 페이지 개설</li>
+                                            <li>- 인스타그램, 페이스북 등 SNS 채널 운영</li>
+                                            <li>- 월간 프로그램 일정표 온라인 배포</li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                    <div>
+                                        <span>오프라인 홍보물</span>
+                                        <ul class="space-y-1 mt-1 ml-4 text-sm">
+                                            <li>- 분기별 통합 프로그램 브로슈어 제작</li>
+                                            <li>- 행정복지센터, 도서관 등 공공시설 내 홍보물 비치</li>
+                                            <li>- 지역 버스 정류장 광고판 활용</li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-[#8B4513] mt-2 mr-2"></div>
+                                    <div>
+                                        <span>지역 미디어 협력</span>
+                                        <ul class="space-y-1 mt-1 ml-4 text-sm">
+                                            <li>- 지역 신문, 라디오 프로그램 정기 소개</li>
+                                            <li>- 청주 시정 소식지 내 고정 코너 확보</li>
+                                            <li>- 유튜브 채널 제작 및 운영</li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="lg:w-1/2">
+                        <div class="bg-white rounded-lg overflow-hidden shadow-sm border mb-6">
+                            <div class="bg-[#8B4513]/10 p-3">
+                                <h4 class="font-medium">브랜드 적용 예시</h4>
+                            </div>
+                            <div class="p-4">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="border rounded-lg p-3 text-center">
+                                        <div class="w-16 h-16 bg-[#8B4513] rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-2">C</div>
+                                        <p class="text-sm">인증 현판</p>
+                                    </div>
+                                    <div class="border rounded-lg p-3 text-center">
+                                        <div class="w-32 h-8 bg-[#8B4513] rounded-lg flex items-center justify-center text-white font-bold text-sm mx-auto mb-2">C-Culture Café</div>
+                                        <p class="text-sm">테이블 스탠드</p>
+                                    </div>
+                                    <div class="border rounded-lg p-3 text-center">
+                                        <div class="w-12 h-12 border-2 border-[#8B4513] rounded-full flex items-center justify-center mx-auto mb-2">
+                                            <div class="w-8 h-8 bg-[#8B4513] rounded-full flex items-center justify-center text-white font-bold text-xs">C</div>
+                                        </div>
+                                        <p class="text-sm">배지/뱃지</p>
+                                    </div>
+                                    <div class="border rounded-lg p-3 text-center">
+                                        <div class="w-32 h-10 bg-white border-2 border-[#8B4513] rounded flex items-center justify-between px-2 mx-auto mb-2">
+                                            <div class="w-6 h-6 bg-[#8B4513] rounded-full flex items-center justify-center text-white font-bold text-xs">C</div>
+                            <span class="text-xs">오늘의 문화</span>
+                        </div>
+                        <p class="text-sm">메뉴판</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+                        
+        <div class="bg-[#FFF3E0] p-5 rounded-lg mt-6">
+            <h4 class="font-medium mb-3 text-center">참여 유도 프로그램 예시: 디지털 스탬프 투어</h4>
+            
+            <div class="space-y-3 text-gray-700">
+                <div class="flex">
+                    <div class="w-20 shrink-0 font-medium">운영 방식</div>
+                    <div>
+                        <ul class="space-y-1 text-sm">
+                            <li>• 모바일 앱 또는 QR코드 기반 스탬프 적립</li>
+                            <li>• 카페 방문 시 현장 QR코드 스캔으로 포인트 적립</li>
+                            <li>• 문화 프로그램 참여 시 추가 포인트 적립</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="flex">
+                    <div class="w-20 shrink-0 font-medium">인센티브</div>
+                    <div>
+                        <ul class="space-y-1 text-sm">
+                            <li>• 5개소 이상 방문 시 음료 할인권 등 인센티브 제공</li>
+                            <li>• 10개소 이상 방문 시 일상문화카페 굿즈 증정</li>
+                            <li>• 전체 카페 완주 시 특별 기념품 증정</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="flex">
+                    <div class="w-20 shrink-0 font-medium">기대효과</div>
+                    <div>
+                        <ul class="space-y-1 text-sm">
+                            <li>• 다양한 카페 탐방 유도로 인지도 확산</li>
+                            <li>• 개별 카페 방문객 증가 및 재방문율 향상</li>
+                            <li>• 게이미피케이션을 통한 지역 문화 탐방 촉진</li>
+                            <li>• 청주시 전역을 아우르는 문화 네트워크 구축</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution 3: Implementation Plan Section -->
+    <section id="implementation-plan" class="py-12">
+        <div class="container mx-auto px-4">
+            <div class="solution-indicator mb-6">
+                <div class="dot bg-[#FF5722]"></div>
+                <div class="line bg-[#FF5722]/20"></div>
+                <h2 class="text-3xl font-bold ml-4">단계별 실행 계획 및 지속가능성 확보</h2>
+            </div>
+            
+            <!-- Implementation Schedule -->
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-6">3-1. 분기별 세부 추진 일정</h3>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h4 class="text-lg font-medium text-[#FF5722]">1분기: 기반 조성기</h4>
+                        <div class="mt-2 mb-4 p-4 bg-[#FFF3E0]/50 rounded-lg">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <h5 class="font-medium mb-2">1개월차</h5>
+                                    <ul class="space-y-1 text-sm text-gray-700">
+                                        <li>• 사업 세부 계획 수립</li>
+                                        <li>• 선정 기준 및 평가표 개발</li>
+                                        <li>• 운영 매뉴얼 제작</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium mb-2">2개월차</h5>
+                                    <ul class="space-y-1 text-sm text-gray-700">
+                                        <li>• 공고 및 신청서 접수(3주)</li>
+                                        <li>• 서류 심사 및 현장 방문(1주)</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium mb-2">3개월차</h5>
+                                    <ul class="space-y-1 text-sm text-gray-700">
+                                        <li>• 최종 선정 및 협약 체결</li>
+                                        <li>• 공간 진단 및 개선 컨설팅</li>
+                                        <li>• 기본 장비 지원 및 설치</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h4 class="text-lg font-medium text-[#FF5722]">2분기: 시범 운영기</h4>
+                        <div class="mt-2 mb-4 p-4 bg-[#FFF3E0]/50 rounded-lg">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <h5 class="font-medium mb-2">4-5개월차</h5>
+                                    <ul class="space-y-1 text-sm text-gray-700">
+                                        <li>• 카페별 특화 프로그램 기획 워크숍</li>
+                                        <li>• 문화기획단 구성 및 교육</li>
+                                        <li>• 통합 브랜드 개발 및 적용</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium mb-2">6개월차</h5>
+                                    <ul class="space-y-1 text-sm text-gray-700">
+                                        <li>• 운영 현황 모니터링 및 피드백</li>
+                                        <li>• 개선점 도출 및 보완책 마련</li>
+                                        <li>• 우수 사례 공유 워크숍</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h4 class="text-lg font-medium text-[#FF5722]">3분기: 안정화 및 확산기</h4>
+                        <div class="mt-2 mb-4 p-4 bg-[#FFF3E0]/50 rounded-lg">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <h5 class="font-medium mb-2">7-8개월차</h5>
+                                    <ul class="space-y-1 text-sm text-gray-700">
+                                        <li>• 카페 간 연계 프로그램 개발</li>
+                                        <li>• 지역 자원 연계 특화 프로그램 추가</li>
+                                        <li>• 중간 성과 평가 및 홍보 강화</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium mb-2">9개월차</h5>
+                                    <ul class="space-y-1 text-sm text-gray-700">
+                                        <li>• 가을/겨울 시즌 특별 프로그램 개발</li>
+                                        <li>• 참여 카페 간 노하우 공유회</li>
+                                        <li>• 추가 참여 카페 발굴 및 준비</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h4 class="text-lg font-medium text-[#FF5722]">4분기: 성과 확산 및 지속 기반 마련</h4>
+                        <div class="mt-2 mb-4 p-4 bg-[#FFF3E0]/50 rounded-lg">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <h5 class="font-medium mb-2">10-11개월차</h5>
+                                    <ul class="space-y-1 text-sm text-gray-700">
+                                        <li>• '일상문화카페 페스티벌' 개최</li>
+                                        <li>• 우수 사례 발표회 및 시상</li>
+                                        <li>• 성과 자료집 제작</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium mb-2">12개월차</h5>
+                                    <ul class="space-y-1 text-sm text-gray-700">
+                                        <li>• 종합 성과 평가</li>
+                                        <li>• 지속가능 운영 모델 보완</li>
+                                        <li>• 차년도 확대 계획 수립</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Budget Breakdown -->
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-6">3-2. 세부 예산 산출 내역</h3>
+                
+                <div class="mb-4" style="position: relative; height: 400px;">
+                    <canvas id="budgetDetailChart" height="400px"></canvas>
+                    <p class="text-sm text-gray-500 mt-2 text-right">* 세부 예산 배분 (총 2억원)</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div>
+                        <h4 class="font-medium mb-3 text-[#FF5722]">【공간 조성 및 기반 구축 비용】</h4>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-start justify-between">
+                                <span>카페 당 기본 설비 지원 (200만원 × 20개소)</span>
+                                <span class="font-medium">4,000만원</span>
+                            </li>
+                            <li class="flex items-start justify-between">
+                                <span>공간 컨설팅 (20만원 × 20개소)</span>
+                                <span class="font-medium">400만원</span>
+                            </li>
+                            <li class="flex items-start justify-between">
+                                <span>브랜드 개발 및 인증 표식</span>
+                                <span class="font-medium">300만원</span>
+                            </li>
+                            <li class="flex items-start justify-between font-medium">
+                                <span>소계</span>
+                                <span>4,700만원</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-medium mb-3 text-[#FF5722]">【프로그램 운영비】</h4>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-start justify-between">
+                                <span>카페 당 기본 운영비 (30만원 × 10개월 × 20개소)</span>
+                                <span class="font-medium">6,000만원</span>
+                            </li>
+                            <li class="flex items-start justify-between">
+                                <span>특별 프로그램 개발비 (50만원 × 4회 × 20개소)</span>
+                                <span class="font-medium">4,000만원</span>
+                            </li>
+                            <li class="flex items-start justify-between">
+                                <span>통합 프로그램 운영비 (100만원 × 4분기)</span>
+                                <span class="font-medium">400만원</span>
+                            </li>
+                            <li class="flex items-start justify-between font-medium">
+                                <span>소계</span>
+                                <span>1억 400만원</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-medium mb-3 text-[#FF5722]">【주민 참여 및 네트워크 운영비】</h4>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-start justify-between">
+                                <span>동네 문화기획단 운영 (30개 동 × 50만원)</span>
+                                <span class="font-medium">1,500만원</span>
+                            </li>
+                            <li class="flex items-start justify-between">
+                                <span>네트워크 모임 운영 (20만원 × 12회)</span>
+                                <span class="font-medium">240만원</span>
+                            </li>
+                            <li class="flex items-start justify-between">
+                                <span>역량강화 교육 (100만원 × 4회)</span>
+                                <span class="font-medium">400만원</span>
+                            </li>
+                            <li class="flex items-start justify-between font-medium">
+                                <span>소계</span>
+                                <span>2,140만원</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-medium mb-3 text-[#FF5722]">【홍보 및 성과 확산비】</h4>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-start justify-between">
+                                <span>온라인 플랫폼 구축</span>
+                                <span class="font-medium">500만원</span>
+                            </li>
+                            <li class="flex items-start justify-between">
+                                <span>통합 홍보물 제작 (100만원 × 4분기)</span>
+                                <span class="font-medium">400만원</span>
+                            </li>
+                            <li class="flex items-start justify-between">
+                                <span>일상문화카페 페스티벌</span>
+                                <span class="font-medium">500만원</span>
+                            </li>
+                            <li class="flex items-start justify-between font-medium">
+                                <span>소계</span>
+                                <span>1,400만원</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-medium">총 예산</h4>
+                        <span class="text-xl font-bold">2억원</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-2">
+                        * 1차년도 20개소 기준 예산으로, 2차년도 확대 시(총 30개소) 추가 예산 1억원 소요 예상
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Sustainability Plan -->
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-6">3-3. 지속가능성 확보 방안</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white border border-[#FF5722] rounded-lg p-5">
+                        <div class="w-12 h-12 rounded-full bg-[#FF5722]/10 flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-[#FF5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h4 class="font-medium mb-3">경제적 지속가능성</h4>
+                        <div class="mb-4">
+                            <h5 class="font-medium text-sm mb-2">단계적 자부담 확대 모델</h5>
+                            <div class="space-y-2">
+                                <div>
+                                    <div class="flex justify-between text-sm">
+                                        <span>1차년도</span>
+                                        <span>시 지원 100%</span>
+                                    </div>
+                                    <div class="w-full h-2 bg-gray-200 rounded-full mt-1">
+                                        <div class="h-2 bg-[#FF5722] rounded-full" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-sm">
+                                        <span>2차년도</span>
+                                        <span>시 지원 70% + 자부담 30%</span>
+                                    </div>
+                                    <div class="w-full h-2 bg-gray-200 rounded-full mt-1">
+                                        <div class="h-2 bg-[#FF5722] rounded-full" style="width: 70%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-sm">
+                                        <span>3차년도</span>
+                                        <span>시 지원 50% + 자부담 50%</span>
+                                    </div>
+                                    <div class="w-full h-2 bg-gray-200 rounded-full mt-1">
+                                        <div class="h-2 bg-[#FF5722] rounded-full" style="width: 50%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-sm">
+                                        <span>4차년도 이후</span>
+                                        <span>자체 운영 모델 확립</span>
+                                    </div>
+                                    <div class="w-full h-2 bg-gray-200 rounded-full mt-1">
+                                        <div class="h-2 bg-[#FF5722] rounded-full" style="width: 20%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="font-medium text-sm mb-2">수익 다각화 방안</h5>
+                            <ul class="space-y-1 text-sm text-gray-700">
+                                <li>• 프로그램 참가비 일부 유료화(재료비 수준)</li>
+                                <li>• 특별 음료/디저트 메뉴 개발(문화 프로그램 연계)</li>
+                                <li>• 지역 상품 위탁 판매 코너 운영</li>
+                                <li>• 공간 일부 대관 서비스(오전 시간대 활용)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white border border-[#FF5722] rounded-lg p-5">
+                        <div class="w-12 h-12 rounded-full bg-[#FF5722]/10 flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-[#FF5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <h4 class="font-medium mb-3">운영 지속가능성</h4>
+                        <ul class="space-y-3 text-gray-700">
+                            <li>
+                                <h5 class="font-medium text-sm">카페 운영자 역량 강화</h5>
+                                <ul class="space-y-1 text-sm mt-1">
+                                    <li>• 문화 기획 및 운영 역량 교육(분기 1회)</li>
+                                    <li>• 프로그램 기획 및 진행 매뉴얼 개발·보급</li>
+                                    <li>• 프로그램별 표준 운영 모델 제공</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h5 class="font-medium text-sm">지역 인적 자원 발굴 및 연계</h5>
+                                <ul class="space-y-1 text-sm mt-1">
+                                    <li>• 지역 문화예술인 DB 구축 및 연계</li>
+                                    <li>• 대학생 문화 서포터즈 운영(지역 대학 연계)</li>
+                                    <li>• 은퇴자 재능기부 프로그램 개발</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h5 class="font-medium text-sm">운영 노하우 공유 체계 구축</h5>
+                                <ul class="space-y-1 text-sm mt-1">
+                                    <li>• 프로그램 운영 사례집 발간 및 배포</li>
+                                    <li>• 정기적 운영자 간 노하우 공유회 개최</li>
+                                    <li>• 온라인 통합 플랫폼을 통한 정보 공유</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-white border border-[#FF5722] rounded-lg p-5">
+                        <div class="w-12 h-12 rounded-full bg-[#FF5722]/10 flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-[#FF5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                        </div>
+                        <h4 class="font-medium mb-3">제도적 지속가능성</h4>
+                        <ul class="space-y-3 text-gray-700">
+                            <li>
+                                <h5 class="font-medium text-sm">조례 제정 추진</h5>
+                                <ul class="space-y-1 text-sm mt-1">
+                                    <li>• '청주시 생활문화공간 지원 조례' 마련</li>
+                                    <li>• 일상문화카페의 법적 지위 및 지원 근거 마련</li>
+                                    <li>• 장기적 운영 방향 및 지원 체계 명문화</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h5 class="font-medium text-sm">민관 협력 거버넌스 구축</h5>
+                                <ul class="space-y-1 text-sm mt-1">
+                                    <li>• 청주문화재단, 주민자치회, 카페 운영자 등 참여</li>
+                                    <li>• 분기별 협의체 운영을 통한 정기 점검</li>
+                                    <li>• 상향식(bottom-up) 의사결정 구조 확립</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h5 class="font-medium text-sm">성과 관리 및 피드백 시스템</h5>
+                                <ul class="space-y-1 text-sm mt-1">
+                                    <li>• 시민 만족도 조사 정례화(분기 1회)</li>
+                                    <li>• 프로그램 참여율, 매출 변화 등 정량 지표 관리</li>
+                                    <li>• 연간 종합 평가 및 개선 방안 도출</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Summary Section -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8" data-aos="fade-up">
+                <h2 class="text-2xl font-bold mb-6 text-center">개선방안 요약</h2>
+                
+                <div class="flex flex-col md:flex-row gap-8 mb-8">
+                    <div class="md:w-1/3">
+                        <div class="w-16 h-16 rounded-full bg-[#1E88E5]/10 flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-[#1E88E5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-center text-lg font-bold mb-3">동네별 일상문화카페</h3>
+                        <p class="text-gray-700 text-center">
+                            각 행정동 1개소씩 약 30개소의 일상문화카페를 지정 및 지원하여, 도보 20분 내 접근 가능한 생활 밀착형 문화 인프라 구축
+                        </p>
+                    </div>
+                    
+                    <div class="md:w-1/3">
+                        <div class="w-16 h-16 rounded-full bg-[#8B4513]/10 flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-[#8B4513]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-center text-lg font-bold mb-3">주민 참여형 거버넌스</h3>
+                        <p class="text-gray-700 text-center">
+                            동네 문화기획단과 카페 네트워크 구축을 통해 상향식 문화 기획 및 운영 체계 확립, 시민 주도 문화 프로그램 개발
+                        </p>
+                    </div>
+                    
+                    <div class="md:w-1/3">
+                        <div class="w-16 h-16 rounded-full bg-[#FF5722]/10 flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-[#FF5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-center text-lg font-bold mb-3">지속가능성 확보</h3>
+                        <p class="text-gray-700 text-center">
+                            단계적 자부담 확대, 인적 자원 연계, 조례 제정 등을 통해 경제적·운영적·제도적 지속가능성 확보
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="p-4 bg-gray-50 rounded-lg">
+                    <p class="text-gray-700">
+                        본 제안은 기존의 카페 인프라를 문화공간으로 활용함으로써 적은 예산으로 최대의 효과를 창출하는 혁신적 접근법입니다. 카페 산업의 새로운 부가가치 창출과 시민 문화 접근성 향상이라는 두 가지 목표를 동시에 달성함으로써 청주시의 지속가능한 문화 생태계를 구축하고자 합니다.
+                    </p>
+                </div>
+                
+                <div class="mt-6 text-center">
+                    <a href="effects.html" class="btn-primary px-6 py-2 rounded-full font-medium inline-flex items-center">
+                        기대효과 보기
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between">
+                <div class="mb-8 md:mb-0">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-[#8B4513] font-bold text-lg mr-3">C</div>
+                        <h2 class="text-xl font-bold">청주 카페의 재발견</h2>
+                    </div>
+                    <p class="text-gray-400 max-w-md">
+                        2025 상반기 청주시 「시민 테마아이디어」 공모전 제안서
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">참고자료</h3>
+                    <ul class="text-gray-400 space-y-2">
+                        <li>• 네이버 데이터랩 검색어 트렌드 분석 (2023.05-2025.04)</li>
+                        <li>• 청주시 문화시설 분포 현황 (2024년 기준)</li>
+                        <li>• 국내외 유사 사례 조사 및 벤치마킹</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-400">
+                    © 2025 청주 카페의 재발견 | 청주시 시민 테마아이디어 공모전
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Initialize AOS (Animate on Scroll)
+        document.addEventListener('DOMContentLoaded', function() {
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true
+            });
+            
+            // Mobile menu toggle
+            const menuBtn = document.querySelector('button');
+            const mobileMenu = document.querySelector('.mobile-menu');
+            
+            menuBtn.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Selection Criteria Chart
+            const selectionCriteriaCtx = document.getElementById('selectionCriteriaChart').getContext('2d');
+            const selectionCriteriaChart = new Chart(selectionCriteriaCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['접근성', '공간 적합성', '운영 계획', '지역 연계성'],
+                    datasets: [{
+                        label: '배점',
+                        data: [30, 25, 25, 20],
+                        backgroundColor: 'rgba(30, 136, 229, 0.2)',
+                        borderColor: 'rgba(30, 136, 229, 1)',
+                        pointBackgroundColor: 'rgba(30, 136, 229, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(30, 136, 229, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: true
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 30
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.raw + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Budget Detail Chart
+            const budgetDetailCtx = document.getElementById('budgetDetailChart').getContext('2d');
+            const budgetDetailChart = new Chart(budgetDetailCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        '공간 조성 및 기반 구축 (23.5%)',
+                        '프로그램 운영비 (52.0%)',
+                        '주민 참여 및 네트워크 (10.7%)',
+                        '홍보 및 성과 확산 (7.0%)',
+                        '관리 및 행정 (6.8%)'
+                    ],
+                    datasets: [{
+                        data: [4700, 10400, 2140, 1400, 1360],
+                        backgroundColor: [
+                            '#1E88E5',
+                            '#8B4513',
+                            '#FF5722',
+                            '#4CAF50',
+                            '#9C27B0'
+                        ],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    return `${label}: ${value}만원`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

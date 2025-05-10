@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>키워드 분석 보고서 | 청주 카페의 재발견</title>
+    <meta name="description" content="네이버 데이터랩을 활용한 청주시 관련 키워드 분석 보고서">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Montserrat:wght@600;700&family=Open+Sans&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <!-- AOS (Animate On Scroll) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        /* Custom styles */
+        :root {
+            --cafe-brown: #8B4513;
+            --cheongju-blue: #1E88E5;
+            --cream-bg: #FFF8E1;
+            --accent-orange: #FF5722;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', 'Open Sans', sans-serif;
+            background-color: var(--cream-bg);
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Noto Sans KR', 'Montserrat', sans-serif;
+            font-weight: 700;
+        }
+        
+        .highlight {
+            color: var(--accent-orange);
+            font-weight: 500;
+        }
+        
+        .btn-primary {
+            background-color: var(--cheongju-blue);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #1565C0;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: var(--cafe-brown);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #6D370F;
+            transform: translateY(-2px);
+        }
+
+        .section-divider {
+            height: 4px;
+            background: linear-gradient(90deg, var(--cafe-brown), var(--cheongju-blue));
+            margin: 3rem 0;
+            border-radius: 2px;
+        }
+
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Custom navigation */
+        .nav-link {
+            position: relative;
+            padding-bottom: 3px;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent-orange);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* Chart annotations */
+        .chart-annotation {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 12px;
+            pointer-events: none;
+        }
+        
+        /* Timeline dots */
+        .timeline-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background-color: var(--cheongju-blue);
+            margin-right: 8px;
+            flex-shrink: 0;
+        }
+        
+        /* Category badges */
+        .category-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            color: white;
+            margin-right: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header class="bg-white shadow-md fixed w-full z-10">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="../index.html" class="flex items-center">
+                    <div class="w-12 h-12 bg-[#8B4513] rounded-full flex items-center justify-center text-white font-bold text-lg mr-3">C</div>
+                    <h1 class="text-xl font-bold">청주 카페의 <span class="text-[#1E88E5]">재발견</span></h1>
+                </a>
+            </div>
+            <nav class="hidden md:flex space-x-6">
+                <a href="../index.html#overview" class="nav-link text-gray-800 hover:text-[#FF5722]">개요</a>
+                <a href="report.html" class="nav-link text-gray-800 hover:text-[#FF5722] font-medium">키워드 분석</a>
+                <a href="problems.html" class="nav-link text-gray-800 hover:text-[#FF5722]">현황 및 문제점</a>
+                <a href="solutions.html" class="nav-link text-gray-800 hover:text-[#FF5722]">개선방안</a>
+                <a href="effects.html" class="nav-link text-gray-800 hover:text-[#FF5722]">기대효과</a>
+                <a href="implementation.html" class="nav-link text-gray-800 hover:text-[#FF5722]">실행계획</a>
+            </nav>
+            <button class="md:hidden focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+        <!-- Mobile menu (hidden by default) -->
+        <div class="hidden mobile-menu md:hidden">
+            <ul class="bg-white px-4 py-2">
+                <li><a href="../index.html#overview" class="block py-2 text-gray-800 hover:text-[#FF5722]">개요</a></li>
+                <li><a href="report.html" class="block py-2 text-gray-800 hover:text-[#FF5722] font-medium">키워드 분석</a></li>
+                <li><a href="problems.html" class="block py-2 text-gray-800 hover:text-[#FF5722]">현황 및 문제점</a></li>
+                <li><a href="solutions.html" class="block py-2 text-gray-800 hover:text-[#FF5722]">개선방안</a></li>
+                <li><a href="effects.html" class="block py-2 text-gray-800 hover:text-[#FF5722]">기대효과</a></li>
+                <li><a href="implementation.html" class="block py-2 text-gray-800 hover:text-[#FF5722]">실행계획</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Page Title Section -->
+    <section class="pt-24 pb-8 md:pt-32 md:pb-12 bg-gradient-to-r from-[#1E88E5]/10 to-[#FF5722]/10">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4" data-aos="fade-up">청주시 관련 키워드 분석 보고서</h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="100">
+                네이버 데이터랩(DataLab)의 검색어 트렌드 API를 활용하여 2023년 5월부터 2025년 4월까지의 청주시 관련 키워드 검색 추이를 분석한 결과입니다.
+            </p>
+        </div>
+    </section>
+
+    <!-- Report Summary Section -->
+    <section class="py-8">
+        <div class="container mx-auto px-4">
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+                <h2 class="text-2xl font-bold mb-6">요약</h2>
+                <p class="text-lg mb-6 text-gray-700">
+                    본 보고서는 네이버 데이터랩(DataLab)의 검색어 트렌드 API를 활용하여 2023년 5월부터 2025년 4월까지의 청주시 관련 키워드 검색 추이를 분석한 결과입니다. 청주시의 일상생활, 교통, 문화, 관광, 일자리 등 다양한 분야에 대한 시민들의 관심도를 파악하고, 인근 대도시(대전, 세종)와의 비교를 통해 청주시만의 특징적인 검색어 트렌드를 도출했습니다.
+                </p>
+                
+                <div class="flex flex-wrap -mx-4 mt-8">
+                    <div class="w-full md:w-1/3 px-4 mb-6 md:mb-0">
+                        <div class="p-4 bg-[#F3F4F6] rounded-lg h-full">
+                            <h3 class="text-lg font-bold mb-2 text-[#1E88E5]">높은 카페 관련 관심</h3>
+                            <p class="text-gray-700">
+                                '청주 카페' 키워드는 분석 기간 동안 매우 높은 검색량을 보여 시민들의 카페 문화에 대한 관심이 높음을 확인했습니다.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/3 px-4 mb-6 md:mb-0">
+                        <div class="p-4 bg-[#F3F4F6] rounded-lg h-full">
+                            <h3 class="text-lg font-bold mb-2 text-[#FF5722]">부족한 문화 콘텐츠</h3>
+                            <p class="text-gray-700">
+                                '청주 문화' 키워드 검색량이 0.76(100점 기준)으로 극히 저조해 문화 콘텐츠 부족 현상을 시사합니다.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/3 px-4">
+                        <div class="p-4 bg-[#F3F4F6] rounded-lg h-full">
+                            <h3 class="text-lg font-bold mb-2 text-[#8B4513]">일자리 관심 주기성</h3>
+                            <p class="text-gray-700">
+                                '청주 일자리'와 '청주 공고' 키워드는 11-12월과 2-3월에 주기적으로 급증하는 뚜렷한 패턴을 보입니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Collection Method Section -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-10 text-center" data-aos="fade-up">데이터 수집 방법</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-lg shadow-lg p-6 md:p-8" data-aos="fade-up">
+                    <h3 class="text-xl font-bold mb-4 flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-[#1E88E5]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                        자료 출처
+                    </h3>
+                    <ul class="space-y-3 text-gray-600">
+                        <li class="flex items-start">
+                            <span class="text-[#1E88E5] mr-2">•</span>
+                            <span><strong>데이터 제공 플랫폼</strong>: 네이버 데이터랩(DataLab) 검색어 트렌드 API</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-[#1E88E5] mr-2">•</span>
+                            <span><strong>분석 기간</strong>: 2023년 5월 1일 ~ 2025년 4월 30일 (2년)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-[#1E88E5] mr-2">•</span>
+                            <span><strong>데이터 단위</strong>: 주간 및 월간 검색량</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-lg p-6 md:p-8" data-aos="fade-up">
+                    <h3 class="text-xl font-bold mb-4 flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-[#FF5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                        </svg>
+                        분석 방법
+                    </h3>
+                    <ul class="space-y-3 text-gray-600">
+                        <li class="flex items-start">
+                            <span class="text-[#FF5722] mr-2">•</span>
+                            <span><strong>키워드 그룹별 검색</strong>: 청주 기본, 청주 생활, 청주 인프라, 청주 관광, 청주 문화, 청주 일자리 등</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-[#FF5722] mr-2">•</span>
+                            <span><strong>지역 비교</strong>: 청주, 대전, 세종을 비교하여 지역별 검색 패턴 파악</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-[#FF5722] mr-2">•</span>
+                            <span><strong>시계열 분석</strong>: 주간/월간 단위로 트렌드 변화 관찰</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-[#FF5722] mr-2">•</span>
+                            <span><strong>상대적 검색 비율</strong>: 최대값(100)을 기준으로 한 상대적 검색 비율 분석</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider container mx-auto"></div>
+
+    <!-- Major Findings Section -->
+    <section class="py-12">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-10 text-center" data-aos="fade-up">주요 발견점</h2>
+            
+            <!-- Finding 1: Basic Keywords -->
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-6">2.1 청주시 기본 키워드 검색 트렌드</h3>
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="lg:w-3/5">
+                        <div class="aspect-w-16 aspect-h-9 relative h-72">
+                            <canvas id="basicKeywordsChart"></canvas>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">* 네이버 데이터랩 '청주시', '청주' 키워드 검색량 추이 (2023.05-2025.04)</p>
+                    </div>
+                    <div class="lg:w-2/5">
+                        <div class="p-4 rounded-lg border-l-4 border-[#1E88E5] bg-[#E3F2FD]/30 mb-4">
+                            <h4 class="font-bold mb-2">주요 발견점</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#1E88E5] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span><strong>2023년 7월 초</strong>: 검색량이 급증한 시기로, "청주 기본" 키워드가 최고치(100)를 기록했습니다. 이는 당시 청주 지역의 주요 행사나 이슈가 있었을 가능성을 시사합니다.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#1E88E5] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span><strong>계절적 변동</strong>: 여름철(7-8월)과 겨울방학 시기(1-2월)에 검색량이 소폭 증가하는 패턴이 관찰됩니다.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#1E88E5] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span><strong>2025년 4월 말</strong>: "청주 기본" 키워드가 다시 큰 폭으로 상승(39.00)했습니다.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Finding 2: Cafe & Restaurant Keywords -->
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-6">2.2 청주시 생활 관련 키워드 트렌드</h3>
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="lg:w-3/5">
+                        <div class="aspect-w-16 aspect-h-9 relative h-72">
+                            <canvas id="cafeKeywordsChart"></canvas>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">* 네이버 데이터랩 '청주 카페', '청주 맛집' 키워드 검색량 추이 (2023.05-2025.04)</p>
+                    </div>
+                    <div class="lg:w-2/5">
+                        <div class="p-4 rounded-lg border-l-4 border-[#8B4513] bg-[#FFF3E0]/30 mb-4">
+                            <h4 class="font-bold mb-2">주요 발견점</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#8B4513] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span><strong>높은 검색 빈도</strong>: "청주 카페" 키워드는 전체 분석 기간 동안 매우 높은 검색량(최대 100.00)을 유지했습니다.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#8B4513] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span><strong>2023년 8월</strong>: "청주 카페" 검색이 최고치를 기록하며, 여름 휴가철 관광객 증가와 연관성이 있는 것으로 추정됩니다.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#8B4513] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span><strong>하락 추세</strong>: 2025년 들어 '청주 카페' 검색량이 2023-2024년 대비 약 20-30% 감소하는 추세를 보이고 있습니다.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Finding 3: Cultural Keywords -->
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-6">2.4 청주시 관광/문화 관련 키워드 트렌드</h3>
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="lg:w-1/2">
+                        <div class="aspect-w-16 aspect-h-9 relative h-80">
+                            <canvas id="culturalKeywordsChart"></canvas>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">* 네이버 데이터랩 '청주 문화', '청주 관광' 키워드 검색량 추이 (2023.05-2025.04)</p>
+                    </div>
+                    <div class="lg:w-1/2">
+                        <div class="p-4 rounded-lg border-l-4 border-[#FF5722] bg-[#FBE9E7]/30 mb-4">
+                            <h4 class="font-bold mb-2">주요 발견점</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#FF5722] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span><strong>관광 키워드</strong>: "청주 관광" 키워드는 평균적으로 4.00-8.00 사이의 검색 비율을 유지했습니다.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#FF5722] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span><strong>계절적 패턴</strong>: 봄(4-5월)과 가을(9-10월)에 "청주 관광" 검색이 소폭 증가하는 패턴이 있었습니다.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#FF5722] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span><strong>문화 키워드</strong>: "청주 문화" 키워드는 검색 비율이 매우 낮았으나(대부분 1.00 미만), 2024년 5-6월에 일시적으로 증가(2.00-2.58)했습니다.</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <h4 class="font-medium mb-3">도시별 문화 관련 키워드 검색 비교</h4>
+                            <div class="space-y-3">
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm font-medium">청주</span>
+                                        <span class="text-sm font-medium">0.76</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-4">
+                                        <div class="bg-[#1E88E5] h-4 rounded-full" style="width: 1.85%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm font-medium">세종</span>
+                                        <span class="text-sm font-medium">14.26</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-4">
+                                        <div class="bg-[#1E88E5] h-4 rounded-full" style="width: 34.8%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm font-medium">대전</span>
+                                        <span class="text-sm font-medium">40.98</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-4">
+                                        <div class="bg-[#1E88E5] h-4 rounded-full" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2">* '도시명 문화' 키워드 평균 검색량 비교 (2023.05-2025.04)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Finding 4: Job Keywords -->
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-6">2.5 청주시 일자리 관련 키워드 트렌드</h3>
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="lg:w-3/5">
+                        <div class="aspect-w-16 aspect-h-9 relative h-72">
+                            <canvas id="jobKeywordsChart"></canvas>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">* 네이버 데이터랩 '청주 일자리', '청주 공고' 키워드 검색량 추이 (2023.05-2025.04)</p>
+                    </div>
+                    <div class="lg:w-2/5">
+                        <div class="p-4 rounded-lg border-l-4 border-[#4CAF50] bg-[#E8F5E9]/30 mb-4">
+                            <h4 class="font-bold mb-2">주요 발견점</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#4CAF50] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span><strong>계절적 증가</strong>: 매년 11월-12월과 2-3월에 "청주 일자리"와 "청주 공고" 검색이 크게 증가하는 패턴이 명확했습니다.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#4CAF50] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span><strong>2023년 11월 최고치</strong>: 이 기간 중 "청주 일자리" 검색이 최고치(100.00)를 기록했습니다.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#4CAF50] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span><strong>공공기관 채용 시즌</strong>: 이러한 패턴은 공공기관 및 기업의 채용 공고 시즌과 맞물리는 것으로 보입니다.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Finding 5: City Comparison -->
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-6">2.6 인근 도시와의 비교 트렌드</h3>
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="lg:w-1/2">
+                        <div class="aspect-w-16 aspect-h-9 relative h-80">
+                            <canvas id="cityComparisonChart"></canvas>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">* 네이버 데이터랩 '청주', '대전', '세종' 키워드 검색량 비교 (2023.05-2025.04)</p>
+                    </div>
+                    <div class="lg:w-1/2">
+                        <div class="p-4 rounded-lg border-l-4 border-[#9C27B0] bg-[#F3E5F5]/30 mb-4">
+                            <h4 class="font-bold mb-2">주요 발견점</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#9C27B0] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span><strong>대전 우세</strong>: 대부분의 기간 동안 "대전" 키워드가 "청주"보다 높은 검색량을 보였습니다.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#9C27B0] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span><strong>세종 급성장</strong>: "세종" 키워드는 2025년 1-4월에 약 65% 검색량 증가를 보이며 급성장하는 추세입니다.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#9C27B0] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span><strong>청주 안정세</strong>: "청주" 키워드는 대체로 30-40 수준의 안정적인 검색량을 유지했습니다.</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <h4 class="font-medium mb-3">주요 시점별 도시 검색량 변화</h4>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full bg-white border-collapse">
+                                    <thead>
+                                        <tr>
+                                            <th class="border px-4 py-2 bg-gray-100">시점</th>
+                                            <th class="border px-4 py-2 bg-gray-100">청주</th>
+                                            <th class="border px-4 py-2 bg-gray-100">대전</th>
+                                            <th class="border px-4 py-2 bg-gray-100">세종</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="border px-4 py-2">2023년 7월</td>
+                                            <td class="border px-4 py-2 text-center">38.5</td>
+                                            <td class="border px-4 py-2 text-center">67.2</td>
+                                            <td class="border px-4 py-2 text-center">24.8</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border px-4 py-2">2024년 1월</td>
+                                            <td class="border px-4 py-2 text-center">35.2</td>
+                                            <td class="border px-4 py-2 text-center">62.8</td>
+                                            <td class="border px-4 py-2 text-center">28.3</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border px-4 py-2">2024년 7월</td>
+                                            <td class="border px-4 py-2 text-center">36.7</td>
+                                            <td class="border px-4 py-2 text-center">71.4</td>
+                                            <td class="border px-4 py-2 text-center">30.6</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border px-4 py-2">2025년 1월</td>
+                                            <td class="border px-4 py-2 text-center">32.5</td>
+                                            <td class="border px-4 py-2 text-center">68.9</td>
+                                            <td class="border px-4 py-2 text-center">42.1</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border px-4 py-2">2025년 4월</td>
+                                            <td class="border px-4 py-2 text-center">39.0</td>
+                                            <td class="border px-4 py-2 text-center">64.7</td>
+                                            <td class="border px-4 py-2 text-center">50.5</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2">* 네이버 데이터랩 검색량 지수 (최대값 100 기준)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider container mx-auto"></div>
+
+    <!-- Key Insights Section -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-10 text-center" data-aos="fade-up">주요 인사이트</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Insight 1 -->
+                <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 card" data-aos="fade-up">
+                    <div class="w-16 h-16 rounded-full bg-[#8B4513]/10 flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-[#8B4513]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">청주시 여가/소비 문화의 중요성</h3>
+                    <p class="text-gray-700 mb-4">
+                        청주 시민들은 "청주 카페", "청주 맛집"과 같은 여가 및 소비 관련 키워드에 높은 관심을 보이고 있습니다. 이는 청주시의 카페 및 식당 문화가 시민 생활에 중요한 부분을 차지하고 있음을 시사합니다. 특히 코로나19 이후 지역 내 소비 활동이 증가한 것으로 보입니다.
+                    </p>
+                    <div class="p-3 bg-[#FFF3E0]/50 rounded-lg">
+                        <span class="font-medium">시사점:</span> 카페 및 식당과 같은 생활 밀착형 공간을 활용한 문화 활동 증진 방안 모색 필요
+                    </div>
+                </div>
+                
+                <!-- Insight 2 -->
+                <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 card" data-aos="fade-up">
+                    <div class="w-16 h-16 rounded-full bg-[#4CAF50]/10 flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-[#4CAF50]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">고용 기회에 대한 높은 관심</h3>
+                    <p class="text-gray-700 mb-4">
+                        "청주 일자리", "청주 공고" 검색어의 주기적 증가는 시민들이 지역 내 취업 기회에 대한 높은 관심을 가지고 있음을 보여줍니다. 특히 11월-12월, 2-3월에 집중되는 패턴은 공공기관 및 기업의 채용 시즌에 맞춰진 것으로, 청주시의 고용 시장 동향을 반영합니다.
+                    </p>
+                    <div class="p-3 bg-[#E8F5E9]/50 rounded-lg">
+                        <span class="font-medium">시사점:</span> 지역 내 안정적 일자리 창출 및 창업 환경 개선을 위한 정책적 접근 필요
+                    </div>
+                </div>
+                
+                <!-- Insight 3 -->
+                <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 card" data-aos="fade-up">
+                    <div class="w-16 h-16 rounded-full bg-[#1E88E5]/10 flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-[#1E88E5]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">교통 및 인프라에 대한 상대적 낮은 관심</h3>
+                    <p class="text-gray-700 mb-4">
+                        "청주 교통", "청주 주거"와 같은 인프라 관련 키워드는 다른 분야에 비해 현저히 낮은 검색량을 보였습니다. 이는 현재 청주시의 교통 및 주거 인프라가 시민들에게 큰 불편을 주지 않거나, 해당 정보를 얻는 다른 채널이 있을 가능성을 시사합니다.
+                    </p>
+                    <div class="p-3 bg-[#E3F2FD]/50 rounded-lg">
+                        <span class="font-medium">시사점:</span> 시민들의 관심이 다른 요소에 집중되어 있음을 인지하고, 상대적으로 문제가 적은 분야로 판단 가능
+                    </div>
+                </div>
+                
+                <!-- Insight 4 -->
+                <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 card" data-aos="fade-up">
+                    <div class="w-16 h-16 rounded-full bg-[#9C27B0]/10 flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-[#9C27B0]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">세종시와의 경쟁 심화</h3>
+                    <p class="text-gray-700 mb-4">
+                        2025년 초부터 "세종" 키워드의 검색량이 급증하는 추세는 세종시의 영향력이 커지고 있음을 보여줍니다. 행정중심복합도시로서의 세종시 발전이 청주시에 미치는 영향을 고려한 정책 수립이 필요할 것으로 보입니다.
+                    </p>
+                    <div class="p-3 bg-[#F3E5F5]/50 rounded-lg">
+                        <span class="font-medium">시사점:</span> 인근 도시와의 차별화 전략 수립 및 상생 방안 모색을 통한 경쟁력 강화 필요
+                    </div>
+                </div>
+                
+                <!-- Insight 5 -->
+                <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 card" data-aos="fade-up">
+                    <div class="w-16 h-16 rounded-full bg-[#FF5722]/10 flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-[#FF5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">문화/관광 콘텐츠의 부족</h3>
+                    <p class="text-gray-700 mb-4">
+                        "청주 문화", "청주 관광" 키워드의 낮은 검색 비율은 청주시의 문화 및 관광 콘텐츠가 상대적으로 부족하거나 인지도가 낮을 가능성을 시사합니다. 이는 청주시가 관광도시로서의 발전 가능성을 더 모색할 여지가 있음을 의미합니다.
+                    </p>
+                    <div class="p-3 bg-[#FBE9E7]/50 rounded-lg">
+                        <span class="font-medium">시사점:</span> 문화 콘텐츠 강화 및 접근성 향상을 통한 시민 만족도 제고 및 관광 경쟁력 확보 필요
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider container mx-auto"></div>
+
+    <!-- Proposal Topics Section -->
+    <section class="py-12">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-10 text-center" data-aos="fade-up">공모전 주제 제안</h2>
+            
+            <p class="text-lg text-gray-700 mb-8 text-center max-w-4xl mx-auto" data-aos="fade-up">
+                네이버 데이터랩 검색어 트렌드 분석 결과를 바탕으로, 다음과 같은 시민 테마 아이디어 공모전 주제를 제안합니다.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Topic 1 -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="h-2 bg-[#8B4513]"></div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-3">
+                            <span class="category-badge bg-[#8B4513]">여가/소비</span>
+                            <span class="category-badge bg-[#FF9800]">문화</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">청주 카페 및 음식점 문화 개선 아이디어</h3>
+                        <p class="text-gray-600 mb-4">
+                            청주 시민들이 가장 많이 검색하는 키워드가 "청주 카페"임을 고려할 때, 이 분야에 대한 개선 요구가 있을 것으로 예상됩니다.
+                        </p>
+                        <ul class="space-y-2 text-gray-600 mb-4">
+                            <li class="flex items-start">
+                                <span class="text-[#8B4513] mr-2">•</span>
+                                <span>지역 특색을 살린, 차별화된 카페 및 음식점 개발 아이디어</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-[#8B4513] mr-2">•</span>
+                                <span>청주만의 특색 있는 카페 거리 조성 방안</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-[#8B4513] mr-2">•</span>
+                                <span>로컬 식재료를 활용한 청주 특화 음식 개발 아이디어</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Topic 2 -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="h-2 bg-[#4CAF50]"></div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-3">
+                            <span class="category-badge bg-[#4CAF50]">일자리</span>
+                            <span class="category-badge bg-[#1E88E5]">경제</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">청주시 일자리 및 창업 환경 개선 아이디어</h3>
+                        <p class="text-gray-600 mb-4">
+                            "청주 일자리"와 "청주 공고" 검색량이 주기적으로 급증하는 점을 고려할 때, 일자리 창출에 대한 시민들의 관심이 높습니다.
+                        </p>
+                        <ul class="space-y-2 text-gray-600 mb-4">
+                            <li class="flex items-start">
+                                <span class="text-[#4CAF50] mr-2">•</span>
+                                <span>청년 일자리 창출을 위한 지역 특화 산업 육성 방안</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-[#4CAF50] mr-2">•</span>
+                                <span>스타트업 지원 및 창업 환경 개선 아이디어</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-[#4CAF50] mr-2">•</span>
+                                <span>지역 기업과 구직자 간 효과적인 매칭 시스템 제안</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Topic 3 -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="h-2 bg-[#FF5722]"></div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-3">
+                            <span class="category-badge bg-[#FF5722]">문화</span>
+                            <span class="category-badge bg-[#9C27B0]">관광</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">청주 문화관광 콘텐츠 발굴 아이디어</h3>
+                        <p class="text-gray-600 mb-4">
+                            "청주 문화", "청주 관광" 키워드의 낮은 검색 비율은 이 분야의 발전 가능성을 시사합니다.
+                        </p>
+                        <ul class="space-y-2 text-gray-600 mb-4">
+                            <li class="flex items-start">
+                                <span class="text-[#FF5722] mr-2">•</span>
+                                <span>청주시 역사문화자원을 활용한 관광 상품 개발 아이디어</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-[#FF5722] mr-2">•</span>
+                                <span>청주만의 특색 있는 문화 행사 및 축제 제안</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-[#FF5722] mr-2">•</span>
+                                <span>인근 도시(대전, 세종)와 연계한 관광 루트 개발 방안</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-10 p-6 bg-white rounded-lg shadow-lg" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-4 flex items-center">
+                    <svg class="w-6 h-6 mr-2 text-[#FF5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                    </svg>
+                    선정 제안: 청주 카페의 재발견
+                </h3>
+                <p class="text-gray-700 mb-4">
+                    네이버 데이터랩 분석 결과를 종합해볼 때, <strong>청주 시민들의 카페에 대한 높은 관심도</strong>와 <strong>문화 콘텐츠의 부족</strong>이라는 두 가지 주요 현상이 확인되었습니다. 이를 종합적으로 해결할 수 있는 <strong>"청주 카페의 재발견: 동네별 '일상문화카페' 지정 및 운영"</strong> 주제를 최종 제안합니다.
+                </p>
+                <div class="p-4 rounded-lg bg-[#FFF3E0]/50 border-l-4 border-[#FF5722]">
+                    <p class="text-gray-700">
+                        이 제안은 청주 시민들이 가장 자주 찾는 '카페'라는 공간을 문화 콘텐츠 전달의 매개체로 활용함으로써, 문화 향유 기회 확대와 지역 카페 산업 활성화라는 두 가지 목표를 동시에 달성할 수 있는 혁신적인 접근법입니다.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider container mx-auto"></div>
+
+    <!-- Conclusion Section -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-10 text-center" data-aos="fade-up">결론 및 제언</h2>
+            
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8" data-aos="fade-up">
+                <p class="text-lg text-gray-700 mb-6">
+                    네이버 데이터랩 검색어 트렌드 분석 결과, 청주 시민들은 카페, 맛집과 같은 여가/소비 공간과 일자리 기회에 높은 관심을 보이고 있습니다. 반면, 교통, 주거, 문화, 관광 분야는 상대적으로 낮은 검색량을 보이고 있어 잠재적 개선 가능성이 있는 영역으로 판단됩니다.
+                </p>
+                
+                <p class="text-lg text-gray-700 mb-6">
+                    향후 청주시가 100만 자족도시로 발전하기 위해서는 일자리 창출뿐만 아니라, 문화관광 콘텐츠 강화, 인프라 개선, 생활 환경 질적 향상 등 다양한 분야에서의 균형 있는 발전이 필요합니다. 시민 테마 아이디어 공모전을 통해 시민들의 창의적인 아이디어를 적극 발굴하고, 이를 시정에 반영함으로써 '더 좋은 청주 행복한 시민'을 실현할 수 있을 것입니다.
+                </p>
+                
+                <div class="flex items-center justify-center mt-8">
+                    <a href="../index.html" class="btn-primary px-6 py-2 rounded-full font-medium inline-flex items-center">
+                        메인 페이지로 돌아가기
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="mt-8 p-4 bg-[#E3F2FD] rounded-lg text-center" data-aos="fade-up">
+                <p class="text-gray-700 text-sm">
+                    본 보고서는 2025년 5월 청주시 시민 테마아이디어 공모전 주제 선정을 위한 기초 자료로 작성되었습니다.<br>
+                    <strong>분석 기간</strong>: 2023년 5월 1일 ~ 2025년 4월 30일 | <strong>작성일</strong>: 2025년 5월 9일 | <strong>데이터 출처</strong>: 네이버 데이터랩 검색어 트렌드 API
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between">
+                <div class="mb-8 md:mb-0">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-[#8B4513] font-bold text-lg mr-3">C</div>
+                        <h2 class="text-xl font-bold">청주 카페의 재발견</h2>
+                    </div>
+                    <p class="text-gray-400 max-w-md">
+                        2025 상반기 청주시 「시민 테마아이디어」 공모전 제안서
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">참고자료</h3>
+                    <ul class="text-gray-400 space-y-2">
+                        <li>• 네이버 데이터랩 검색어 트렌드 분석 (2023.05-2025.04)</li> 
+                        <li>• 청주시 문화시설 분포 현황 (2024년 기준)</li>
+                        <li>• 국내외 유사 사례 조사 및 벤치마킹</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-400">
+                    © 2025 청주 카페의 재발견 | 청주시 시민 테마아이디어 공모전
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Initialize AOS (Animate on Scroll)
+        document.addEventListener('DOMContentLoaded', function() {
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true
+            });
+            
+            // Mobile menu toggle
+            const menuBtn = document.querySelector('button');
+            const mobileMenu = document.querySelector('.mobile-menu');
+            
+            menuBtn.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Basic Keywords Chart
+            const basicKeywordsCtx = document.getElementById('basicKeywordsChart').getContext('2d');
+            const basicKeywordsChart = new Chart(basicKeywordsCtx, {
+                type: 'line',
+                data: {
+                    labels: ['23.05', '23.07', '23.09', '23.11', '24.01', '24.03', '24.05', '24.07', '24.09', '24.11', '25.01', '25.03'],
+                    datasets: [{
+                        label: '청주시 기본 키워드',
+                        data: [45, 100, 52, 47, 50, 42, 46, 48, 43, 40, 42, 39],
+                        borderColor: '#1E88E5',
+                        backgroundColor: 'rgba(30, 136, 229, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: '검색량 (최대값 100 기준)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Cafe Keywords Chart
+            const cafeKeywordsCtx = document.getElementById('cafeKeywordsChart').getContext('2d');
+            const cafeKeywordsChart = new Chart(cafeKeywordsCtx, {
+                type: 'line',
+                data: {
+                    labels: ['23.05', '23.08', '23.11', '24.02', '24.05', '24.08', '24.11', '25.02', '25.04'],
+                    datasets: [{
+                        label: '청주 카페',
+                        data: [91, 100, 93, 89, 85, 82, 77, 69, 64],
+                        borderColor: '#8B4513',
+                        backgroundColor: 'rgba(139, 69, 19, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: '청주 맛집',
+                        data: [58, 65, 62, 60, 63, 59, 55, 53, 50],
+                        borderColor: '#FF9800',
+                        backgroundColor: 'rgba(255, 152, 0, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: '검색량 (최대값 100 기준)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Cultural Keywords Chart
+            const culturalKeywordsCtx = document.getElementById('culturalKeywordsChart').getContext('2d');
+            const culturalKeywordsChart = new Chart(culturalKeywordsCtx, {
+                type: 'line',
+                data: {
+                    labels: ['23.05', '23.08', '23.11', '24.02', '24.05', '24.08', '24.11', '25.02', '25.04'],
+                    datasets: [{
+                        label: '청주 관광',
+                        data: [4.5, 7.2, 5.8, 4.0, 5.5, 7.8, 6.2, 4.2, 4.3],
+                        borderColor: '#FF5722',
+                        backgroundColor: 'rgba(255, 87, 34, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: '청주 문화',
+                        data: [0.6, 0.8, 0.7, 0.5, 2.5, 1.2, 0.8, 0.4, 0.7],
+                        borderColor: '#9C27B0',
+                        backgroundColor: 'rgba(156, 39, 176, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 10,
+                            title: {
+                                display: true,
+                                text: '검색량 (최대값 100 기준)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Job Keywords Chart
+            const jobKeywordsCtx = document.getElementById('jobKeywordsChart').getContext('2d');
+            const jobKeywordsChart = new Chart(jobKeywordsCtx, {
+                type: 'line',
+                data: {
+                    labels: ['23.05', '23.08', '23.11', '24.02', '24.05', '24.08', '24.11', '25.02', '25.04'],
+                    datasets: [{
+                        label: '청주 일자리',
+                        data: [42, 38, 100, 68, 35, 32, 95, 72, 40],
+                        borderColor: '#4CAF50',
+                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: '청주 공고',
+                        data: [38, 35, 85, 63, 30, 28, 82, 65, 36],
+                        borderColor: '#8BC34A',
+                        backgroundColor: 'rgba(139, 195, 74, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: '검색량 (최대값 100 기준)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // City Comparison Chart
+            const cityComparisonCtx = document.getElementById('cityComparisonChart').getContext('2d');
+            const cityComparisonChart = new Chart(cityComparisonCtx, {
+                type: 'line',
+                data: {
+                    labels: ['23.05', '23.08', '23.11', '24.02', '24.05', '24.08', '24.11', '25.02', '25.04'],
+                    datasets: [{
+                        label: '청주',
+                        data: [38, 38, 35, 32, 37, 37, 33, 33, 39],
+                        borderColor: '#1E88E5',
+                        backgroundColor: 'rgba(30, 136, 229, 0.1)',
+                        tension: 0.4,
+                        fill: false
+                    }, {
+                        label: '대전',
+                        data: [65, 67, 63, 62, 68, 71, 69, 69, 65],
+                        borderColor: '#9C27B0',
+                        backgroundColor: 'rgba(156, 39, 176, 0.1)',
+                        tension: 0.4,
+                        fill: false
+                    }, {
+                        label: '세종',
+                        data: [22, 25, 26, 28, 30, 31, 33, 42, 51],
+                        borderColor: '#FF5722',
+                        backgroundColor: 'rgba(255, 87, 34, 0.1)',
+                        tension: 0.4,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: '검색량 (최대값 100 기준)'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1838 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>현황 및 문제점 | 청주 카페의 재발견</title>
+    <meta name="description" content="청주시 카페 산업과 문화 인프라의 현황 및 문제점 분석">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Montserrat:wght@600;700&family=Open+Sans&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <!-- AOS (Animate On Scroll) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- D3.js for advanced visualizations -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <style>
+        /* Custom styles */
+        :root {
+            --cafe-brown: #8B4513;
+            --cheongju-blue: #1E88E5;
+            --cream-bg: #FFF8E1;
+            --accent-orange: #FF5722;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', 'Open Sans', sans-serif;
+            background-color: var(--cream-bg);
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Noto Sans KR', 'Montserrat', sans-serif;
+            font-weight: 700;
+        }
+        
+        .highlight {
+            color: var(--accent-orange);
+            font-weight: 500;
+        }
+        
+        .btn-primary {
+            background-color: var(--cheongju-blue);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #1565C0;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: var(--cafe-brown);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #6D370F;
+            transform: translateY(-2px);
+        }
+
+        .section-divider {
+            height: 4px;
+            background: linear-gradient(90deg, var(--cafe-brown), var(--cheongju-blue));
+            margin: 3rem 0;
+            border-radius: 2px;
+        }
+
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Naver trend graph simulation */
+        .trend-line {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: dash 3s ease-in-out forwards;
+        }
+        
+        @keyframes dash {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        /* Custom navigation */
+        .nav-link {
+            position: relative;
+            padding-bottom: 3px;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent-orange);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* Problem indicator */
+        .problem-indicator {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .problem-indicator .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+        
+        .problem-indicator .line {
+            flex-grow: 1;
+            height: 3px;
+        }
+        
+        /* Heatmap styles */
+        .district {
+            stroke: white;
+            stroke-width: 1px;
+        }
+        
+        .district:hover {
+            stroke-width: 2px;
+            stroke: #333;
+        }
+        
+        .legend-cell {
+            width: 30px;
+            height: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header class="bg-white shadow-md fixed w-full z-10">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="../index.html" class="flex items-center">
+                    <div class="w-12 h-12 bg-[#8B4513] rounded-full flex items-center justify-center text-white font-bold text-lg mr-3">C</div>
+                    <h1 class="text-xl font-bold">청주 카페의 <span class="text-[#1E88E5]">재발견</span></h1>
+                </a>
+            </div>
+            <nav class="hidden md:flex space-x-6">
+                <a href="../index.html#overview" class="nav-link text-gray-800 hover:text-[#FF5722]">개요</a>
+                <a href="report.html" class="nav-link text-gray-800 hover:text-[#FF5722] font-medium">키워드 분석</a>
+                <a href="problems.html" class="nav-link text-gray-800 hover:text-[#FF5722] font-medium">현황 및 문제점</a>
+                <a href="solutions.html" class="nav-link text-gray-800 hover:text-[#FF5722]">개선방안</a>
+                <a href="effects.html" class="nav-link text-gray-800 hover:text-[#FF5722]">기대효과</a>
+                <a href="implementation.html" class="nav-link text-gray-800 hover:text-[#FF5722]">실행계획</a>
+            </nav>
+            <button class="md:hidden focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+        <!-- Mobile menu (hidden by default) -->
+        <div class="hidden mobile-menu md:hidden">
+            <ul class="bg-white px-4 py-2">
+                <li><a href="../index.html#overview" class="block py-2 text-gray-800 hover:text-[#FF5722]">개요</a></li>
+                <li><a href="report.html" class="block py-2 text-gray-800 hover:text-[#FF5722] font-medium">키워드 분석</a></li>
+                <li><a href="problems.html" class="block py-2 text-gray-800 hover:text-[#FF5722] font-medium">현황 및 문제점</a></li>
+                <li><a href="solutions.html" class="block py-2 text-gray-800 hover:text-[#FF5722]">개선방안</a></li>
+                <li><a href="effects.html" class="block py-2 text-gray-800 hover:text-[#FF5722]">기대효과</a></li>
+                <li><a href="implementation.html" class="block py-2 text-gray-800 hover:text-[#FF5722]">실행계획</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Page Title Section -->
+    <section class="pt-24 pb-8 md:pt-32 md:pb-12 bg-gradient-to-r from-[#8B4513]/10 to-[#1E88E5]/10">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4" data-aos="fade-up">현황 및 문제점</h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="100">
+                청주시 카페 산업과 문화 인프라의 현황을 분석하고 시민들이 체감하는 불편사항을 도출했습니다.
+            </p>
+        </div>
+    </section>
+
+    <!-- Problem Summary Section -->
+    <section class="py-8">
+        <div class="container mx-auto px-4">
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+                <div class="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8">
+                    <div class="w-20 h-20 md:w-24 md:h-24 rounded-full bg-[#FF5722]/10 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-12 h-12 text-[#FF5722]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold mb-4">청주시가 직면한 4가지 핵심 문제</h2>
+                        <ul class="space-y-3">
+                            <li class="flex">
+                                <div class="problem-indicator">
+                                    <div class="dot bg-[#FF5722]"></div>
+                                    <div class="line bg-[#FF5722]/20"></div>
+                                </div>
+                                <span class="font-medium ml-2">청주 카페 시장의 변화와 한계점</span>
+                            </li>
+                            <li class="flex">
+                                <div class="problem-indicator">
+                                    <div class="dot bg-[#1E88E5]"></div>
+                                    <div class="line bg-[#1E88E5]/20"></div>
+                                </div>
+                                <span class="font-medium ml-2">청주시 문화 인프라 및 콘텐츠 부족</span>
+                            </li>
+                            <li class="flex">
+                                <div class="problem-indicator">
+                                    <div class="dot bg-[#8B4513]"></div>
+                                    <div class="line bg-[#8B4513]/20"></div>
+                                </div>
+                                <span class="font-medium ml-2">시민 일상 속 체감 불편사항</span>
+                            </li>
+                            <li class="flex">
+                                <div class="problem-indicator">
+                                    <div class="dot bg-[#4CAF50]"></div>
+                                    <div class="line bg-[#4CAF50]/20"></div>
+                                </div>
+                                <span class="font-medium ml-2">기존 정책 및 시도의 한계</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="text-gray-600">
+                    네이버 데이터랩 분석과 기존 정책 및 통계 자료 분석을 통해 청주시의 카페 산업과 문화 인프라 현황을 파악하고, 시민들이 체감하는 불편사항을 도출했습니다. 이를 통해 '일상문화카페' 제안의 필요성과 방향성을 설정했습니다.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem 1: Cafe Market Section -->
+    <section id="cafe-market" class="py-12">
+        <div class="container mx-auto px-4">
+            <div class="problem-indicator mb-6">
+                <div class="dot bg-[#FF5722]"></div>
+                <div class="line bg-[#FF5722]/20"></div>
+                <h2 class="text-3xl font-bold ml-4">청주 카페 시장의 변화와 한계점</h2>
+            </div>
+            
+            <!-- Trend Analysis -->
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-6">1-1. 카페 검색량 감소 추세 확인</h3>
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="lg:w-2/3">
+                        <div class="aspect-w-16 aspect-h-9 relative h-80">
+                            <canvas id="cafeSearchTrend"></canvas>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">* 네이버 데이터랩 '청주 카페' 검색량 추이 (2023.05-2025.04) / 최대값(100) 기준 상대적 비율</p>
+                    </div>
+                    <div class="lg:w-1/3">
+                        <div class="bg-[#FFF3E0] p-4 rounded-lg mb-4">
+                            <h4 class="font-bold mb-2">주요 발견점</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#FF5722] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>2023년 8월 최고치(100.00) 대비 2025년 2월 기준 64.32로 약 <strong>36% 감소</strong></span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#FF5722] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>2023년 초중반 90-97 수준 → 2024년 대부분 80-90 수준 → 2024년 후반 70-77 수준 → 2025년 초반 64-78 수준</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#FF5722] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>감소세가 꾸준히 이어지는 추세로 카페 시장의 <strong>포화 및 신선도 하락</strong> 징후 확인</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="bg-white border border-gray-200 p-4 rounded-lg">
+                            <h4 class="font-bold mb-2 text-gray-700">시사점</h4>
+                            <p class="text-gray-600">
+                                카페에 대한 시민들의 관심도가 지속적으로 감소하는 추세는 청주 카페 산업의 차별화 및 새로운 가치 제안이 필요함을 시사합니다. 단순 음료 제공을 넘어선 새로운 경험과 가치를 제공하는 방향으로의 진화가 요구됩니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Regional Distribution -->
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-6">1-2. 지역적 편중 심화</h3>
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="lg:w-1/2">
+                        <div id="cafeDistribution" class="w-full h-80 relative">
+                            <!-- D3.js will render map here -->
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">* 청주시 카페 분포 현황 (2024년 기준)</p>
+                    </div>
+                    <div class="lg:w-1/2">
+                        <div class="bg-[#FFF3E0] p-4 rounded-lg mb-4">
+                            <h4 class="font-bold mb-2">주요 발견점</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#FF5722] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>청주시 내 카페의 <strong>70% 이상</strong>이 성안길, 충북대/서원대/청주대 인근, 오창/오송 산업단지 등 일부 상권에 집중</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#FF5722] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>주거 밀집 지역 내 카페는 수적으로는 많으나 대부분 <strong>프랜차이즈 위주로 획일화</strong></span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#FF5722] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>2024년 청주시 카페업 <strong>폐업률 17.3%</strong>로 전국 평균(15.1%)보다 높은 수준 기록</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <h4 class="font-medium mb-3">지역별 카페 밀도 (1만명당 카페 수)</h4>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full bg-white border-collapse">
+                                    <thead>
+                                        <tr>
+                                            <th class="border px-4 py-2 bg-gray-100">지역</th>
+                                            <th class="border px-4 py-2 bg-gray-100">독립카페</th>
+                                            <th class="border px-4 py-2 bg-gray-100">프랜차이즈</th>
+                                            <th class="border px-4 py-2 bg-gray-100">합계</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="border px-4 py-2 font-medium">상당구 중앙동</td>
+                                            <td class="border px-4 py-2 text-center">8.4</td>
+                                            <td class="border px-4 py-2 text-center">3.2</td>
+                                            <td class="border px-4 py-2 text-center font-medium">11.6</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border px-4 py-2 font-medium">서원구 사창동</td>
+                                            <td class="border px-4 py-2 text-center">5.7</td>
+                                            <td class="border px-4 py-2 text-center">4.8</td>
+                                            <td class="border px-4 py-2 text-center font-medium">10.5</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border px-4 py-2 font-medium">흥덕구 가경동</td>
+                                            <td class="border px-4 py-2 text-center">2.3</td>
+                                            <td class="border px-4 py-2 text-center">5.2</td>
+                                            <td class="border px-4 py-2 text-center font-medium">7.5</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border px-4 py-2 font-medium">흥덕구 오송읍</td>
+                                            <td class="border px-4 py-2 text-center">1.8</td>
+                                            <td class="border px-4 py-2 text-center">3.5</td>
+                                            <td class="border px-4 py-2 text-center font-medium">5.3</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border px-4 py-2 font-medium">청원구 오창읍</td>
+                                            <td class="border px-4 py-2 text-center">2.1</td>
+                                            <td class="border px-4 py-2 text-center">4.2</td>
+                                            <td class="border px-4 py-2 text-center font-medium">6.3</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Economic Challenges -->
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-6">1-3. 경쟁 심화와 수익성 저하</h3>
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="lg:w-1/2" style="position: relative; height: 300px;">
+                        <canvas id="cafeEconomicsChart" height="300"></canvas>
+                        <p class="text-sm text-gray-500 mt-2">* 청주시 카페 업종 사업체 수 및 매출액 변화 (2022-2024)</p>
+                    </div>
+                    <div class="lg:w-1/2">
+                        <div class="bg-[#FFF3E0] p-4 rounded-lg mb-4">
+                            <h4 class="font-bold mb-2">주요 발견점</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#FF5722] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>청주시 카페 업종 사업체 수: 2022년 1,240개 → 2024년 1,580개로 <strong>27% 증가</strong></span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#FF5722] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>카페당 평균 일 매출액: 2022년 45만원 → 2024년 36만원으로 <strong>20% 감소</strong></span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#FF5722] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>단순 음료 판매만으로는 <strong>수익 확보 어려운 구조적 한계</strong> 발생</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <h4 class="font-medium mb-3">카페 운영 비용 구조</h4>
+                            <div class="relative w-full h-10 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="absolute left-0 top-0 h-full bg-[#8B4513] text-white text-xs flex items-center justify-center" style="width: 37%">임대료 37%</div>
+                                <div class="absolute left-37% top-0 h-full bg-[#A0522D] text-white text-xs flex items-center justify-center" style="width: 32%">인건비 32%</div>
+                                <div class="absolute left-69% top-0 h-full bg-[#CD853F] text-white text-xs flex items-center justify-center" style="width: 18%">재료비 18%</div>
+                                <div class="absolute left-87% top-0 h-full bg-[#DEB887] text-white text-xs flex items-center justify-center" style="width: 13%">기타 13%</div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2">* 청주시 평균 카페 운영 비용 구성비 (2024년 기준, n=50)</p>
+                            
+                            <div class="mt-4 p-3 border border-[#FF5722] border-dashed rounded-lg">
+                                <p class="text-gray-700">
+                                    <span class="font-medium">구조적 어려움:</span> 매출 감소와 고정비 증가로 인해 청주 카페들이 <strong>새로운 부가가치 창출</strong> 필요성 증가. 기존 카페 비즈니스 모델의 한계 극복을 위한 혁신적 접근 요구됨.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem 2: Cultural Infrastructure Section -->
+    <section id="cultural-infra" class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="problem-indicator mb-6">
+                <div class="dot bg-[#1E88E5]"></div>
+                <div class="line bg-[#1E88E5]/20"></div>
+                <h2 class="text-3xl font-bold ml-4">청주시 문화 인프라 및 콘텐츠 부족</h2>
+            </div>
+            
+            <!-- Search Keywords Analysis -->
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-6">2-1. 문화 관련 키워드 검색량 현저히 낮음</h3>
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="lg:w-3/5" style="position: relative; height: 300px;">
+                        <canvas id="keywordComparisonChart" height="300"></canvas>
+                        <p class="text-sm text-gray-500 mt-2">* 네이버 데이터랩 키워드 검색량 비교 (2023.05-2025.04, 최대값 100 기준)</p>
+                    </div>
+                    <div class="lg:w-2/5">
+                        <div class="bg-[#E3F2FD] p-4 rounded-lg mb-4">
+                            <h4 class="font-bold mb-2">주요 발견점</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#1E88E5] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>'청주 문화' 키워드 평균 검색량 <strong>0.76</strong>(100점 기준)으로 극히 저조</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#1E88E5] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>'청주 관광' 키워드 평균 검색량 <strong>5.04</strong>로 일상 문화 소비에 대한 관심 제한적</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#1E88E5] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>대전(40.98), 세종(14.26) 등 인근 도시와 비교해도 <strong>문화 관련 검색 비율 낮음</strong></span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <h4 class="font-medium mb-3">도시별 문화 관련 키워드 검색 비교</h4>
+                            <div class="space-y-3">
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm font-medium">청주</span>
+                                        <span class="text-sm font-medium">0.76</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-4">
+                                        <div class="bg-[#1E88E5] h-4 rounded-full" style="width: 1.85%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm font-medium">세종</span>
+                                        <span class="text-sm font-medium">14.26</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-4">
+                                        <div class="bg-[#1E88E5] h-4 rounded-full" style="width: 34.8%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm font-medium">대전</span>
+                                        <span class="text-sm font-medium">40.98</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-4">
+                                        <div class="bg-[#1E88E5] h-4 rounded-full" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2">* '도시명 문화' 키워드 평균 검색량 비교 (2023.05-2025.04)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Cultural Facilities Distribution -->
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-6">2-2. 생활문화시설 분포 불균형</h3>
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="lg:w-1/2">
+                        <div id="culturalFacilitiesMap" class="w-full h-80">
+                            <!-- D3.js will render heatmap here -->
+                        </div>
+                        <div class="flex items-center justify-center mt-3">
+                            <div class="flex items-center">
+                                <div class="flex">
+                                    <div class="legend-cell bg-[#EDF8FB]"></div>
+                                    <div class="legend-cell bg-[#B2E2E2]"></div>
+                                    <div class="legend-cell bg-[#66C2A4]"></div>
+                                    <div class="legend-cell bg-[#2CA25F]"></div>
+                                    <div class="legend-cell bg-[#006D2C]"></div>
+                                </div>
+                                <div class="ml-2 text-xs text-gray-600">
+                                    <span>적음</span>
+                                    <span class="mx-10">문화시설 밀도</span>
+                                    <span>많음</span>
+                                </div>
+                            </div>
+                        </div><br>
+                        <p class="text-sm text-gray-500 mt-2">* 청주시 문화시설 분포 현황 (2024년 기준)</p>
+                    </div>
+                    <div class="lg:w-1/2">
+                        <div class="bg-[#E3F2FD] p-4 rounded-lg mb-4">
+                            <h4 class="font-bold mb-2">주요 발견점</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#1E88E5] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>청주시 공공 문화시설 39개소, 민간 문화시설 127개소 운영 중</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#1E88E5] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>읍면동별 평균 문화시설 수 <strong>1.54개</strong>로 전국 지방 중소도시 평균(2.13개) 대비 72% 수준</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#1E88E5] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>원도심과 외곽 지역 간 <strong>문화시설 불균형 심각</strong> (상당구 중앙동 3.2개 vs 흥덕구 오송읍 0.7개)</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <h4 class="font-medium mb-3">문화시설 유형별 분포</h4>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full bg-white border-collapse">
+                                    <thead>
+                                        <tr>
+                                            <th class="border px-4 py-2 bg-gray-100">시설 유형</th>
+                                            <th class="border px-4 py-2 bg-gray-100">개소 수</th>
+                                            <th class="border px-4 py-2 bg-gray-100">인구 10만명당</th>
+                                            <th class="border px-4 py-2 bg-gray-100">전국 평균</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="border px-4 py-2">도서관</td>
+                                            <td class="border px-4 py-2 text-center">14</td>
+                                            <td class="border px-4 py-2 text-center">1.87</td>
+                                            <td class="border px-4 py-2 text-center">2.33</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border px-4 py-2">문화원/문화의집</td>
+                                            <td class="border px-4 py-2 text-center">5</td>
+                                            <td class="border px-4 py-2 text-center">0.67</td>
+                                            <td class="border px-4 py-2 text-center">0.82</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border px-4 py-2">문화센터</td>
+                                            <td class="border px-4 py-2 text-center">7</td>
+                                            <td class="border px-4 py-2 text-center">0.93</td>
+                                            <td class="border px-4 py-2 text-center">1.27</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border px-4 py-2">박물관/미술관</td>
+                                            <td class="border px-4 py-2 text-center">13</td>
+                                            <td class="border px-4 py-2 text-center">1.73</td>
+                                            <td class="border px-4 py-2 text-center">1.95</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border px-4 py-2">공연장</td>
+                                            <td class="border px-4 py-2 text-center">15</td>
+                                            <td class="border px-4 py-2 text-center">2.00</td>
+                                            <td class="border px-4 py-2 text-center">2.85</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border px-4 py-2">복합문화공간</td>
+                                            <td class="border px-4 py-2 text-center">84</td>
+                                            <td class="border px-4 py-2 text-center">11.20</td>
+                                            <td class="border px-4 py-2 text-center">17.51</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2">* 인구 10만명당 문화시설 개수 (2024년 기준)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Cultural Content Consumption -->
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-6">2-3. 타 지역 문화 소비 이탈 현상</h3>
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="lg:w-2/5" style="position: relative; height: 300px;">
+                        <canvas id="culturalExodusChart" height="300"></canvas>
+                        <p class="text-sm text-gray-500 mt-2">* 청주시민 대상 설문조사 (2024년, n=500)</p>
+                    </div>
+                    <div class="lg:w-3/5">
+                        <div class="bg-[#E3F2FD] p-4 rounded-lg mb-4">
+                            <h4 class="font-bold mb-2">주요 발견점</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#1E88E5] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>청주시민 대상 설문조사(2024년, n=500) 결과, <strong>월 1회 이상 타 지역에서 문화활동</strong>을 즐긴다는 응답이 42.7%</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#1E88E5] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>특히 <strong>20-30대는 58.3%</strong>가 대전, 서울 등지로 문화 소비를 위해 이동한다고 응답</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#1E88E5] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>청주시 문화예술 소비 활동의 <strong>역외 유출액: 연간 약 180억원</strong> 추정(2024년 기준)</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-4 border rounded-lg">
+                                <h4 class="font-medium mb-3">타 지역 방문 이유 (중복응답)</h4>
+                                <div class="space-y-3">
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-sm">다양한 문화 콘텐츠</span>
+                                            <span class="text-sm">78.4%</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-3">
+                                            <div class="bg-[#1E88E5] h-3 rounded-full" style="width: 78.4%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-sm">주변 여가 시설 연계</span>
+                                            <span class="text-sm">67.2%</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-3">
+                                            <div class="bg-[#1E88E5] h-3 rounded-full" style="width: 67.2%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-sm">문화 공간의 분위기</span>
+                                            <span class="text-sm">53.6%</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-3">
+                                            <div class="bg-[#1E88E5] h-3 rounded-full" style="width: 53.6%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-sm">접근성/교통 편의성</span>
+                                            <span class="text-sm">42.3%</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-3">
+                                            <div class="bg-[#1E88E5] h-3 rounded-full" style="width: 42.3%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-4 border rounded-lg">
+                                <h4 class="font-medium mb-3">청주시 내 문화 활동 미흡 이유</h4>
+                                <div class="space-y-3">
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-sm">다양성 부족</span>
+                                            <span class="text-sm">83.7%</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-3">
+                                            <div class="bg-[#1E88E5] h-3 rounded-full" style="width: 83.7%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-sm">생활권 내 접근성</span>
+                                            <span class="text-sm">72.5%</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-3">
+                                            <div class="bg-[#1E88E5] h-3 rounded-full" style="width: 72.5%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-sm">정보 접근성</span>
+                                            <span class="text-sm">64.1%</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-3">
+                                            <div class="bg-[#1E88E5] h-3 rounded-full" style="width: 64.1%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-sm">시간대 제한</span>
+                                            <span class="text-sm">58.9%</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-3">
+                                            <div class="bg-[#1E88E5] h-3 rounded-full" style="width: 58.9%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem 3: Citizen Inconveniences Section -->
+    <section id="citizen-issues" class="py-12">
+        <div class="container mx-auto px-4">
+            <div class="problem-indicator mb-6">
+                <div class="dot bg-[#8B4513]"></div>
+                <div class="line bg-[#8B4513]/20"></div>
+                <h2 class="text-3xl font-bold ml-4">시민 일상 속 체감 불편사항</h2>
+            </div>
+            
+            <!-- Accessibility Issues -->
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-6">3-1. 생활권 내 문화 접근성 문제</h3>
+                <div class="flex flex-col lg:flex-row gap-8">
+
+<div class="lg:w-1/2">
+    <div class="w-full rounded-lg overflow-hidden border border-gray-200">
+        <svg viewBox="0 0 600 400" class="w-full h-auto">
+            <!-- Background map of Cheongju -->
+            <rect x="50" y="50" width="500" height="300" fill="#f5f5f5" stroke="#ccc" />
+            
+            <!-- Districts with different accessibility levels -->
+            <rect x="50" y="50" width="250" height="150" fill="#90CAF9" stroke="#fff" stroke-width="1" />
+            <rect x="300" y="50" width="250" height="150" fill="#E3F2FD" stroke="#fff" stroke-width="1" />
+            <rect x="50" y="200" width="250" height="150" fill="#E3F2FD" stroke="#fff" stroke-width="1" />
+            <rect x="300" y="200" width="250" height="150" fill="#BBDEFB" stroke="#fff" stroke-width="1" />
+            
+            <!-- District names -->
+            <text x="175" y="125" font-size="16" font-weight="bold" text-anchor="middle">상당구</text>
+            <text x="425" y="125" font-size="16" font-weight="bold" text-anchor="middle">서원구</text>
+            <text x="175" y="275" font-size="16" font-weight="bold" text-anchor="middle">청원구</text>
+            <text x="425" y="275" font-size="16" font-weight="bold" text-anchor="middle">흥덕구</text>
+            
+            <!-- Walkable areas (20-min radius) -->
+            <circle cx="140" cy="100" r="30" fill="rgba(30, 136, 229, 0.3)" stroke="#1E88E5" />
+            <circle cx="200" cy="150" r="35" fill="rgba(30, 136, 229, 0.3)" stroke="#1E88E5" />
+            <circle cx="350" cy="80" r="25" fill="rgba(30, 136, 229, 0.3)" stroke="#1E88E5" />
+            <circle cx="450" cy="120" r="30" fill="rgba(30, 136, 229, 0.3)" stroke="#1E88E5" />
+            <circle cx="380" cy="250" r="40" fill="rgba(30, 136, 229, 0.3)" stroke="#1E88E5" />
+            <circle cx="120" cy="220" r="20" fill="rgba(30, 136, 229, 0.3)" stroke="#1E88E5" />
+            
+            <!-- Cultural facilities -->
+            <circle cx="140" cy="100" r="5" fill="#1E88E5" />
+            <circle cx="200" cy="150" r="5" fill="#1E88E5" />
+            <circle cx="350" cy="80" r="5" fill="#1E88E5" />
+            <circle cx="450" cy="120" r="5" fill="#1E88E5" />
+            <circle cx="380" cy="250" r="5" fill="#1E88E5" />
+            <circle cx="120" cy="220" r="5" fill="#1E88E5" />
+            
+            <!-- Legend -->
+            <circle cx="80" cy="370" r="5" fill="#1E88E5" />
+            <text x="95" y="375" font-size="12" text-anchor="start">문화시설</text>
+            
+            <circle cx="165" cy="370" r="15" fill="rgba(30, 136, 229, 0.3)" stroke="#1E88E5" />
+            <text x="185" y="375" font-size="12" text-anchor="start">도보 20분 접근 가능 영역</text>
+            
+            <!-- Coverage percentage -->
+            <text x="495" y="375" font-size="14" font-weight="bold" text-anchor="end" fill="#1E88E5">접근성 보장 지역: 35.7%</text>
+        </svg>
+    </div>
+    <p class="text-sm text-gray-500 mt-2">* 도보 20분 내 문화시설 접근 가능 지역 (청주시, 2024년 기준)</p>
+</div>
+
+                    <div class="lg:w-1/2">
+                        <div class="bg-[#FFF3E0] p-4 rounded-lg mb-4">
+                            <h4 class="font-bold mb-2">주요 발견점</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#8B4513] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>최근 설문조사(2024년) 결과, 청주시민 <strong>65.3%</strong>가 "걸어서 갈 수 있는 문화공간이 부족하다"고 응답</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#8B4513] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>특히 영유아 동반 가족(78.4%), 노인(71.2%) 등 <strong>이동약자의 문화 접근성 어려움</strong> 호소</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#8B4513] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>대중교통으로 30분 내 도달 가능한 문화공간 <strong>평균 1.3개소</strong>에 불과(타 중소도시 평균 2.1개소)</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <h4 class="font-medium mb-3">계층별 문화 접근성 만족도</h4>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full bg-white border-collapse">
+                                    <thead>
+                                        <tr>
+                                            <th class="border px-4 py-2 bg-gray-100">계층</th>
+                                            <th class="border px-4 py-2 bg-gray-100">만족</th>
+                                            <th class="border px-4 py-2 bg-gray-100">보통</th>
+                                            <th class="border px-4 py-2 bg-gray-100">불만족</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="border px-4 py-2 font-medium">청소년(13-19세)</td>
+                                            <td class="border px-4 py-2 text-center">23.7%</td>
+                                            <td class="border px-4 py-2 text-center">31.5%</td>
+                                            <td class="border px-4 py-2 text-center font-medium">44.8%</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border px-4 py-2 font-medium">청년(20-34세)</td>
+                                            <td class="border px-4 py-2 text-center">18.2%</td>
+                                            <td class="border px-4 py-2 text-center">29.3%</td>
+                                            <td class="border px-4 py-2 text-center font-medium">52.5%</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border px-4 py-2 font-medium">중장년(35-64세)</td>
+                                            <td class="border px-4 py-2 text-center">21.5%</td>
+                                            <td class="border px-4 py-2 text-center">35.7%</td>
+                                            <td class="border px-4 py-2 text-center font-medium">42.8%</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border px-4 py-2 font-medium">노년(65세 이상)</td>
+                                            <td class="border px-4 py-2 text-center">13.3%</td>
+                                            <td class="border px-4 py-2 text-center">15.5%</td>
+                                            <td class="border px-4 py-2 text-center font-medium">71.2%</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border px-4 py-2 font-medium">영유아 동반 가정</td>
+                                            <td class="border px-4 py-2 text-center">11.6%</td>
+                                            <td class="border px-4 py-2 text-center">10.0%</td>
+                                            <td class="border px-4 py-2 text-center font-medium">78.4%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2">* 청주시민 대상 설문조사 (2024년, n=500)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Cost Burden -->
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-6">3-2. 비용 부담으로 인한 문화 소외 현상</h3>
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="lg:w-2/5"  style="position: relative; height: 300px;">
+                        <canvas id="costBurdenChart" height="300"></canvas>
+                        <p class="text-sm text-gray-500 mt-2">* 청주시민 문화 활동 비용 부담 조사 (2024년, n=500)</p>
+                    </div>
+                    <div class="lg:w-3/5">
+                        <div class="bg-[#FFF3E0] p-4 rounded-lg mb-4">
+                            <h4 class="font-bold mb-2">주요 발견점</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#8B4513] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>가족 4인 기준 공연/전시 관람 1회 평균 비용: <strong>8.2만원</strong>(교통비, 식비 포함)</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#8B4513] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>월 소득 대비 문화비 지출 비율이 <strong>3% 미만</strong>인 가구 비율 72.1%로 높음</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#8B4513] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>저소득층의 <strong>89.3%</strong>가 비용 부담으로 문화 활동 참여에 제약이 있다고 응답</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <h4 class="font-medium mb-3">문화 활동 1회 비용 분석 (가족 4인 기준)</h4>
+                            <div class="flex flex-col space-y-4">
+                                <div class="flex items-center">
+                                    <div class="w-32 text-right pr-4">교통비</div>
+                                    <div class="flex-1 h-8 bg-gray-200 relative">
+                                        <div class="absolute inset-y-0 left-0 bg-[#8B4513]" style="width: 33%"></div>
+                                        <div class="absolute inset-y-0 left-0 w-full flex items-center justify-between px-2">
+                                            <span class="text-white font-medium">27,000원</span>
+                                            <span class="text-gray-600 font-medium">(33%)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-32 text-right pr-4">입장료/참가비</div>
+                                    <div class="flex-1 h-8 bg-gray-200 relative">
+                                        <div class="absolute inset-y-0 left-0 bg-[#8B4513]" style="width: 49%"></div>
+                                        <div class="absolute inset-y-0 left-0 w-full flex items-center justify-between px-2">
+                                            <span class="text-white font-medium">40,000원</span>
+                                            <span class="text-gray-600 font-medium">(49%)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-32 text-right pr-4">식음료 비용</div>
+                                    <div class="flex-1 h-8 bg-gray-200 relative">
+                                        <div class="absolute inset-y-0 left-0 bg-[#8B4513]" style="width: 18%"></div>
+                                        <div class="absolute inset-y-0 left-0 w-full flex items-center justify-between px-2">
+                                            <span class="text-white font-medium">15,000원</span>
+                                            <span class="text-gray-600 font-medium">(18%)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center font-medium">
+                                    <div class="w-32 text-right pr-4">총 비용</div>
+                                    <div class="flex-1 h-8 flex items-center px-2 bg-[#FFF3E0]">
+                                        82,000원
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2">* 청주시 문화 활동 비용 실태조사 (2024년)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Community Space Shortage -->
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-6">3-3. 소통과 커뮤니티 공간 부족</h3>
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="lg:w-1/2">
+                        <div class="p-4 border rounded-lg">
+                            <h4 class="font-medium mb-4">커뮤니티 공간 수요 vs 공급</h4>
+                            <div class="relative">
+                                <div class="h-48 w-full" style="position: relative; height: 300px;">
+                                    <canvas id="communitySpaceChart"></canvas>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2">* 청주시 동네별 커뮤니티 활동 공간 수요 및 공급 현황 (2024년)</p>
+                        </div>
+                    </div>
+                    <div class="lg:w-1/2">
+                        <div class="bg-[#FFF3E0] p-4 rounded-lg mb-4">
+                            <h4 class="font-bold mb-2">주요 발견점</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#8B4513] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>동네 단위 커뮤니티 활동 공간 <strong>평균 0.7개소</strong>로 수요 대비 절대 부족</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#8B4513] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>모임, 동아리 활동을 위한 공간 대여 시 <strong>평균 시간당 2만원 이상</strong>의 비용 발생</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#8B4513] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>공공시설(주민센터 등)은 <strong>개방시간 제한</strong>(주로 평일 9-6시), <strong>대관 절차 복잡성</strong> 등으로 접근성 한계</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#8B4513] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>카페 내 모임 진행 시 '눈치' 문제 – 설문 응답자의 <strong>67.2%</strong>가 경험</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <h4 class="font-medium mb-3">모임 공간 확보 어려움 (설문조사 응답)</h4>
+                            <div class="p-4 bg-gray-50 rounded-lg">
+                                <div class="space-y-3 text-gray-700">
+                                    <p class="italic text-sm">"평일 저녁에 동네에서 5-6명 모임을 할 곳이 거의 없어요. 주민센터는 이미 퇴근했고, 연습실은 너무 비싸고, 카페에 가면 눈치가 보이죠."</p>
+                                    <p class="italic text-sm">- 30대 주부, 상당구 거주</p>
+                                </div>
+                                <div class="mt-4 space-y-3 text-gray-700">
+                                    <p class="italic text-sm">"취미 모임을 하고 싶어도 공간이 없어 자꾸 무산됩니다. 영화 토론을 하려면 영상을 함께 볼 공간도 필요한데, 찾기 어려워요."</p>
+                                    <p class="italic text-sm">- 20대 대학생, 서원구 거주</p>
+                                </div>
+                                <div class="mt-4 space-y-3 text-gray-700">
+                                    <p class="italic text-sm">"카페에서 책 모임을 하면 메뉴를 시켜도 2시간 이상 앉아있기 미안해서 더 많은 음료를 시키게 되고, 결국 부담이 됩니다."</p>
+                                    <p class="italic text-sm">- 40대 직장인, 흥덕구 거주</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem 4: Policy Limitations Section -->
+    <section id="policy-limits" class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="problem-indicator mb-6">
+                <div class="dot bg-[#4CAF50]"></div>
+                <div class="line bg-[#4CAF50]/20"></div>
+                <h2 class="text-3xl font-bold ml-4">기존 정책 및 시도의 한계</h2>
+            </div>
+            
+            <!-- Large Scale Facilities -->
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-6">4-1. 대규모 문화시설 중심 정책의 한계</h3>
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="lg:w-2/5"  style="position: relative; height: 300px;">
+                        <canvas id="budgetDistributionChart" height="300"></canvas>
+                        <p class="text-sm text-gray-500 mt-2">* 청주시 문화 정책 예산 분포 (2024년)</p>
+                    </div>
+                    <div class="lg:w-3/5">
+                        <div class="bg-[#E8F5E9] p-4 rounded-lg mb-4">
+                            <h4 class="font-bold mb-2">주요 발견점</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#4CAF50] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>청주시 문화 정책 예산(2024년): 총 398억원 중 <strong>대규모 문화시설 건립·운영: 256억원(64.3%)</strong></span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#4CAF50] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>1개 문화시설 건립에 약 50-200억원 소요되나, <strong>접근성 한계로 이용률 저조</strong></span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#4CAF50] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>청주시 공공 문화시설 연평균 이용률: 수용인원 대비 <strong>26.7%</strong>(전국 평균 31.5%)</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <h4 class="font-medium mb-3">문화시설 이용률 및 투자 대비 효과</h4>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full bg-white border-collapse">
+                                    <thead>
+                                        <tr>
+                                            <th class="border px-4 py-2 bg-gray-100">시설 유형</th>
+                                            <th class="border px-4 py-2 bg-gray-100">건립 비용</th>
+                                            <th class="border px-4 py-2 bg-gray-100">연간 운영비</th>
+                                            <th class="border px-4 py-2 bg-gray-100">이용률</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="border px-4 py-2">문화예술회관</td>
+                                            <td class="border px-4 py-2 text-center">185억원</td>
+                                            <td class="border px-4 py-2 text-center">12억원</td>
+                                            <td class="border px-4 py-2 text-center">31.5%</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border px-4 py-2">복합문화센터</td>
+                                            <td class="border px-4 py-2 text-center">120억원</td>
+                                            <td class="border px-4 py-2 text-center">8억원</td>
+                                            <td class="border px-4 py-2 text-center">27.8%</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border px-4 py-2">도서관</td>
+                                            <td class="border px-4 py-2 text-center">65억원</td>
+                                            <td class="border px-4 py-2 text-center">5억원</td>
+                                            <td class="border px-4 py-2 text-center">42.3%</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border px-4 py-2">생활문화센터</td>
+                                            <td class="border px-4 py-2 text-center">25억원</td>
+                                            <td class="border px-4 py-2 text-center">3억원</td>
+                                            <td class="border px-4 py-2 text-center">35.1%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2">* 청주시 문화시설 투자 및 이용 현황 (2024년 기준)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- One-time Events -->
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 mb-8" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-6">4-2. 일회성 행사 중심 문화 사업의 한계</h3>
+                <div class="flex flex-col lg:flex-row gap-8">
+
+                    <div class="lg:w-2/5"  style="position: relative; height: 300px;">
+  <canvas id="eventTypeChart" height="300"></canvas>
+<p class="text-sm text-gray-500 mt-2">* 청주시 문화행사 유형 분석 (2024년)</p> 
+</div>
+
+
+                    <div class="lg:w-1/2">
+                        <div class="bg-[#E8F5E9] p-4 rounded-lg mb-4">
+                            <h4 class="font-bold mb-2">주요 발견점</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#4CAF50] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>청주시 문화행사 중 <strong>일회성/계절성 행사 비중 71.5%</strong>로 지속성 부족</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#4CAF50] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>행사 당 평균 예산 <strong>1.3억원</strong> 소요되나, 시민 체감 지속 효과 미미</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#4CAF50] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>특히 외곽지역 주민들의 참여율 현저히 낮음 (평균 참여율 <strong>중심지역 32.4% vs 외곽지역 11.7%</strong>)</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <h4 class="font-medium mb-3">청주시 주요 문화행사 현황 (2024년)</h4>
+                            <div class="space-y-4">
+                                <div class="p-3 border rounded-lg">
+                                    <div class="flex justify-between mb-1">
+                                        <span class="font-medium">청주공예비엔날레</span>
+                                        <span>예산: 25억원</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-1">2년마다 개최, 2개월간 진행</p>
+                                    <div class="flex justify-between text-sm">
+                                        <span>방문객: 35만명</span>
+                                        <span>외곽지역 주민 참여율: 15.2%</span>
+                                    </div>
+                                </div>
+                                <div class="p-3 border rounded-lg">
+                                    <div class="flex justify-between mb-1">
+                                        <span class="font-medium">청주시 문화재 야행</span>
+                                        <span>예산: 4.5억원</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-1">연 2회 개최, 각 2일간 진행</p>
+                                    <div class="flex justify-between text-sm">
+                                        <span>방문객: 5.8만명</span>
+                                        <span>외곽지역 주민 참여율: 8.7%</span>
+                                    </div>
+                                </div>
+                                <div class="p-3 border rounded-lg">
+                                    <div class="flex justify-between mb-1">
+                                        <span class="font-medium">청주 문화 축제</span>
+                                        <span>예산: 3.2억원</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-1">연 1회 개최, 3일간 진행</p>
+                                    <div class="flex justify-between text-sm">
+                                        <span>방문객: 4.2만명</span>
+                                        <span>외곽지역 주민 참여율: 10.3%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Private Cultural Spaces -->
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8" data-aos="fade-up">
+                <h3 class="text-xl font-bold mb-6">4-3. 민간 주도 문화 공간의 지속가능성 문제</h3>
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="lg:w-2/5"  style="position: relative; height: 300px;">
+                        <canvas id="privateCulturalSpacesChart" height="300"></canvas>
+                        <p class="text-sm text-gray-500 mt-2">* 2020-2024년 민간 복합문화공간 생존율 (청주시)</p>
+                    </div>
+                    <div class="lg:w-3/5">
+                        <div class="bg-[#E8F5E9] p-4 rounded-lg mb-4">
+                            <h4 class="font-bold mb-2">주요 발견점</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#4CAF50] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>2020-2024년 사이 오픈한 민간 복합문화공간 25개소 중 <strong>14개소 폐업(56%)</strong></span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#4CAF50] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>주요 폐업 원인: <strong>임대료 부담(47%)</strong>, 운영 인력 부족(23%), 콘텐츠 지속성 한계(18%)</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-[#4CAF50] mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>초기 지원은 있으나 <strong>지속가능한 운영 모델 확립 실패</strong> 사례 다수</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <h4 class="font-medium mb-3">민간 문화공간 운영 사례 분석</h4>
+                            <div class="space-y-4">
+                                <div class="p-3 border rounded-lg">
+                                    <h5 class="font-medium mb-1">A 북카페 (2021년 오픈, 2023년 폐업)</h5>
+                                    <p class="text-sm text-gray-600 mb-2">상당구 소재, 도서 2,000권, 문화프로그램 월 3-4회 운영</p>
+                                    <p class="text-sm">"초기 시 지원금 1,500만원으로 시작했으나, 2년차부터 수익 모델 부재와 임대료 상승으로 운영 어려움. 독서 모임과 작가 강연 등 다양한 프로그램을 시도했으나 수익화에 한계."</p>
+                                </div>
+                                <div class="p-3 border rounded-lg">
+                                    <h5 class="font-medium mb-1">B 아트스페이스 (2020년 오픈, 운영 중)</h5>
+                                    <p class="text-sm text-gray-600 mb-2">서원구 소재, 갤러리 및 공방 복합공간, 교육프로그램 상시 운영</p>
+                                    <p class="text-sm">"예술 교육 수업료와 카페 매출을 통해 운영 비용 일부 충당. 건물주와의 장기 임대 계약(5년)으로 임대료 안정화가 생존 요인. 그러나 운영 인력 확보와 마케팅에 여전히 어려움 있음."</p>
+                                </div>
+                                <div class="p-3 border rounded-lg">
+                                    <h5 class="font-medium mb-1">C 커뮤니티 허브 (2022년 오픈, 2024년 폐업)</h5>
+                                    <p class="text-sm text-gray-600 mb-2">흥덕구 소재, 코워킹스페이스 및 소규모 공연장 겸용</p>
+                                    <p class="text-sm">"다양한 문화 프로그램과 대관 서비스를 제공했으나, 안정적인 수익원 확보 실패. 콘텐츠 기획과 마케팅을 위한 전문 인력 유지 비용 부담이 크게 작용."</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Summary Section -->
+    <section class="py-12">
+        <div class="container mx-auto px-4">
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8" data-aos="fade-up">
+                <h2 class="text-2xl font-bold mb-6 text-center">현황 및 문제점 요약</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-4 border-l-4 border-[#FF5722] bg-[#FFF3E0]/50">
+                        <h3 class="font-bold mb-3">카페 시장의 변화</h3>
+                        <p class="text-gray-700">청주시 카페 검색량 36% 감소, 지역적 편중 심화, 경쟁 심화로 인한 수익성 저하 등 기존 카페 비즈니스 모델의 한계에 직면. 차별화와 새로운 가치 제안이 필요한 시점.</p>
+                    </div>
+                    <div class="p-4 border-l-4 border-[#1E88E5] bg-[#E3F2FD]/50">
+                        <h3 class="font-bold mb-3">문화 인프라 부족</h3>
+                        <p class="text-gray-700">문화 관련 키워드 검색량 저조, 문화시설 지역 불균형, 타 지역 문화 소비 유출 등 청주시 문화 인프라와 콘텐츠의 양적・질적 부족 현상 심각.</p>
+                    </div>
+                    <div class="p-4 border-l-4 border-[#8B4513] bg-[#FFF3E0]/50">
+                        <h3 class="font-bold mb-3">시민 불편사항</h3>
+                        <p class="text-gray-700">생활권 내 문화 접근성 제한, 비용 부담, 커뮤니티 공간 부족 등 일상 속에서 문화를 향유하는데 있어 시민들이 체감하는 불편사항 다수 발견.</p>
+                    </div>
+                    <div class="p-4 border-l-4 border-[#4CAF50] bg-[#E8F5E9]/50">
+                        <h3 class="font-bold mb-3">기존 정책의 한계</h3>
+                        <p class="text-gray-700">대규모 시설 중심, 일회성 행사 위주의 정책으로 실질적 생활 문화 향상 효과 미흡. 민간 주도 문화공간의 지속가능성 확보 방안 필요.</p>
+                    </div>
+                </div>
+                <div class="mt-8 p-4 bg-gray-50 rounded-lg">
+                    <p class="text-gray-700">
+                        이러한 현황 및 문제점은 청주시 내 접근성 높은 일상 문화공간의 필요성을 시사합니다. <strong>동네별 '일상문화카페' 지정 및 운영</strong>은 기존 카페 산업에 새로운 부가가치를 창출하는 동시에, 시민들의 문화 접근성을 혁신적으로 향상시키는 대안이 될 수 있습니다.
+                    </p>
+                </div>
+                <div class="mt-6 text-center">
+                    <a href="../pages/solutions.html" class="btn-primary px-6 py-2 rounded-full font-medium inline-flex items-center">
+                        개선방안 보기
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between">
+                <div class="mb-8 md:mb-0">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-[#8B4513] font-bold text-lg mr-3">C</div>
+                        <h2 class="text-xl font-bold">청주 카페의 재발견</h2>
+                    </div>
+                    <p class="text-gray-400 max-w-md">
+                        2025 상반기 청주시 「시민 테마아이디어」 공모전 제안서
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">참고자료</h3>
+                    <ul class="text-gray-400 space-y-2">
+                        <li>• 네이버 데이터랩 검색어 트렌드 분석 (2023.05-2025.04)</li>
+                        <li>• 청주시 문화시설 분포 현황 (2024년 기준)</li>
+                        <li>• 국내외 유사 사례 조사 및 벤치마킹</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-400">
+                    © 2025 청주 카페의 재발견 | 청주시 시민 테마아이디어 공모전
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Initialize AOS (Animate on Scroll)
+        document.addEventListener('DOMContentLoaded', function() {
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true
+            });
+            
+            // Mobile menu toggle
+            const menuBtn = document.querySelector('button');
+            const mobileMenu = document.querySelector('.mobile-menu');
+            
+            menuBtn.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Cafe Search Trend Chart
+            const cafeSearchTrendCtx = document.getElementById('cafeSearchTrend').getContext('2d');
+            const cafeSearchTrendChart = new Chart(cafeSearchTrendCtx, {
+                type: 'line',
+                data: {
+                    labels: ['23.05', '23.08', '23.11', '24.02', '24.05', '24.08', '24.11', '25.02', '25.04'],
+                    datasets: [{
+                        label: '청주 카페 검색량',
+                        data: [91, 100, 93, 89, 85, 82, 77, 69, 64],
+                        borderColor: '#8B4513',
+                        backgroundColor: 'rgba(139, 69, 19, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: '검색량 (최대값 100 기준)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: '날짜 (년.월)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        annotation: {
+                            annotations: {
+                                line1: {
+                                    type: 'line',
+                                    mode: 'horizontal',
+                                    scaleID: 'y',
+                                    value: 90,
+                                    borderColor: '#FF5722',
+                                    borderWidth: 2,
+                                    borderDash: [5, 5],
+                                    label: {
+                                        enabled: true,
+                                        content: '2023년 평균',
+                                        position: 'right'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Cafe Economics Chart
+            const cafeEconomicsCtx = document.getElementById('cafeEconomicsChart').getContext('2d');
+            const cafeEconomicsChart = new Chart(cafeEconomicsCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['2022', '2023', '2024'],
+                    datasets: [{
+                        label: '카페 사업체 수',
+                        data: [1240, 1420, 1580],
+                        backgroundColor: '#8B4513',
+                        yAxisID: 'y',
+                        order: 1
+                    }, {
+                        label: '카페당 평균 일 매출액(만원)',
+                        data: [45, 41, 36],
+                        backgroundColor: '#FF5722',
+                        type: 'line',
+                        yAxisID: 'y1',
+                        order: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '사업체 수'
+                            }
+                        },
+                        y1: {
+                            beginAtZero: true,
+                            position: 'right',
+                            grid: {
+                                drawOnChartArea: false
+                            },
+                            title: {
+                                display: true,
+                                text: '일 매출액(만원)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: '연도'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Keyword Comparison Chart
+            const keywordComparisonCtx = document.getElementById('keywordComparisonChart').getContext('2d');
+            const keywordComparisonChart = new Chart(keywordComparisonCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['청주 카페', '청주 맛집', '청주 관광', '청주 문화', '청주 축제'],
+                    datasets: [{
+                        label: '네이버 검색량 (최대값 100 기준)',
+                        data: [91, 64, 5.04, 0.76, 2.85],
+                        backgroundColor: [
+                            '#8B4513',
+                            '#A0522D',
+                            '#1E88E5',
+                            '#1565C0',
+                            '#FF5722'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '검색량 (최대값 100 기준)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Cultural Exodus Chart
+            const culturalExodusCtx = document.getElementById('culturalExodusChart').getContext('2d');
+            const culturalExodusChart = new Chart(culturalExodusCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        '월 1회 이상 타 지역 이동',
+                        '월 1회 미만 타 지역 이동',
+                        '청주시 내에서만 문화활동'
+                    ],
+                    datasets: [{
+                        data: [42.7, 28.9, 28.4],
+                        backgroundColor: [
+                            '#1E88E5',
+                            '#64B5F6',
+                            '#E3F2FD'
+                        ],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+            
+            // Cost Burden Chart
+            const costBurdenCtx = document.getElementById('costBurdenChart').getContext('2d');
+            const costBurdenChart = new Chart(costBurdenCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['월 소득 대비 문화비 3% 이상', '월 소득 대비 문화비 3% 미만'],
+                    datasets: [{
+                        data: [27.9, 72.1],
+                        backgroundColor: [
+                            '#8B4513',
+                            '#D7CCC8'
+                        ],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+            
+            // Community Space Chart
+            const communitySpaceCtx = document.getElementById('communitySpaceChart').getContext('2d');
+            const communitySpaceChart = new Chart(communitySpaceCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['상당구', '서원구', '흥덕구', '청원구'],
+                    datasets: [{
+                        label: '동네 커뮤니티 공간 수요',
+                        data: [3.2, 2.8, 3.5, 2.6],
+                        backgroundColor: '#8B4513'
+                    }, {
+                        label: '실제 공간 공급',
+                        data: [0.9, 0.8, 0.7, 0.5],
+                        backgroundColor: '#FF5722'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '동(洞)별 평균 개수'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Budget Distribution Chart
+            const budgetDistributionCtx = document.getElementById('budgetDistributionChart').getContext('2d');
+            const budgetDistributionChart = new Chart(budgetDistributionCtx, {
+                type: 'pie',
+                data: {
+                    labels: [
+                        '대규모 문화시설 건립·운영',
+                        '축제·행사 운영',
+                        '생활문화 지원'
+                    ],
+                    datasets: [{
+                        data: [64.3, 21.9, 13.8],
+                        backgroundColor: [
+                            '#4CAF50',
+                            '#81C784',
+                            '#C8E6C9'
+                        ],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    return `${label}: ${value}% (${(value * 398 / 100).toFixed(0)}억원)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Private Cultural Spaces Chart
+            const privateCulturalSpacesCtx = document.getElementById('privateCulturalSpacesChart').getContext('2d');
+            const privateCulturalSpacesChart = new Chart(privateCulturalSpacesCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['오픈', '1년차 생존', '2년차 생존', '3년차 생존', '4년차 생존'],
+                    datasets: [{
+                        label: '민간 복합문화공간 수',
+                        data: [25, 22, 16, 12, 11],
+                        backgroundColor: '#4CAF50'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '공간 수'
+                            },
+                            ticks: {
+                                stepSize: 5
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Create cafe distribution map visualization - simplified for demonstration
+            // In a real implementation, this would use D3.js to create a detailed map
+            const cafeDistributionEl = document.getElementById('cafeDistribution');
+            if (cafeDistributionEl) {
+                // Simplified visualization placeholder
+                const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                svg.setAttribute("viewBox", "0 0 500 300");
+                svg.setAttribute("width", "100%");
+                svg.setAttribute("height", "100%");
+                
+                // Create a simple map representation
+                const map = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                map.setAttribute("x", "50");
+                map.setAttribute("y", "50");
+                map.setAttribute("width", "400");
+                map.setAttribute("height", "200");
+                map.setAttribute("fill", "#E3F2FD");
+                map.setAttribute("stroke", "#1E88E5");
+                
+                // Add districts
+                const districts = [
+                    {name: "상당구", x: 50, y: 50, width: 200, height: 100, fill: "#BBDEFB"},
+                    {name: "서원구", x: 250, y: 50, width: 200, height: 100, fill: "#90CAF9"},
+                    {name: "청원구", x: 50, y: 150, width: 200, height: 100, fill: "#64B5F6"},
+                    {name: "흥덕구", x: 250, y: 150, width: 200, height: 100, fill: "#42A5F5"}
+                ];
+                
+                districts.forEach(d => {
+                    const district = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                    district.setAttribute("x", d.x);
+                    district.setAttribute("y", d.y);
+                    district.setAttribute("width", d.width);
+                    district.setAttribute("height", d.height);
+                    district.setAttribute("fill", d.fill);
+                    district.setAttribute("stroke", "#1E88E5");
+                    district.setAttribute("class", "district");
+                    
+                    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    text.setAttribute("x", d.x + d.width/2);
+                    text.setAttribute("y", d.y + d.height/2);
+                    text.setAttribute("text-anchor", "middle");
+                    text.setAttribute("dominant-baseline", "middle");
+                    text.setAttribute("font-size", "14");
+                    text.setAttribute("font-weight", "bold");
+                    text.textContent = d.name;
+                    
+                    svg.appendChild(district);
+                    svg.appendChild(text);
+                });
+                
+                // Add cafe points (concentrated in certain areas)
+                const cafes = [];
+                // 상당구 (concentrated)
+                for(let i=0; i<30; i++) {
+                    cafes.push({x: 50 + Math.random() * 70, y: 50 + Math.random() * 40});
+                }
+                // 서원구 (concentrated)
+                for(let i=0; i<25; i++) {
+                    cafes.push({x: 250 + Math.random() * 70, y: 50 + Math.random() * 40});
+                }
+                // 청원구 (sparse)
+                for(let i=0; i<10; i++) {
+                    cafes.push({x: 50 + Math.random() * 200, y: 150 + Math.random() * 100});
+                }
+                // 흥덕구 (medium)
+                for(let i=0; i<15; i++) {
+                    cafes.push({x: 250 + Math.random() * 200, y: 150 + Math.random() * 100});
+                }
+                
+                cafes.forEach(c => {
+                    const cafe = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                    cafe.setAttribute("cx", c.x);
+                    cafe.setAttribute("cy", c.y);
+                    cafe.setAttribute("r", "3");
+                    cafe.setAttribute("fill", "#8B4513");
+                    svg.appendChild(cafe);
+                });
+                
+                // Add legend
+                const legendText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                legendText.setAttribute("x", "400");
+                legendText.setAttribute("y", "280");
+                legendText.setAttribute("text-anchor", "end");
+                legendText.setAttribute("font-size", "12");
+                legendText.textContent = "• = 카페 (분포도 표현)";
+                svg.appendChild(legendText);
+                
+                cafeDistributionEl.appendChild(svg);
+            }
+            
+  // Event Type Chart
+  const eventTypeCtx = document.getElementById('eventTypeChart').getContext('2d');
+  const eventTypeChart = new Chart(eventTypeCtx, {
+    type: 'pie',
+    data: {
+      labels: ['일회성/계절성 행사', '정기/상시 행사'],
+      datasets: [{
+        data: [71.5, 28.5],
+        backgroundColor: ['#4CAF50', '#A5D6A7']
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        title: {
+          display: true,
+          text: '청주시 문화행사 유형 분석 (2024년)'
+        }
+      }
+    }
+  });
+
+            // Create cultural facilities heatmap - simplified for demonstration
+            const culturalFacilitiesMapEl = document.getElementById('culturalFacilitiesMap');
+            if (culturalFacilitiesMapEl) {
+                // Similar approach as above, simplified visualization
+                const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                svg.setAttribute("viewBox", "0 0 500 300");
+                svg.setAttribute("width", "100%");
+                svg.setAttribute("height", "100%");
+                
+                // Create a simple map representation
+                const map = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                map.setAttribute("x", "50");
+                map.setAttribute("y", "50");
+                map.setAttribute("width", "400");
+                map.setAttribute("height", "200");
+                map.setAttribute("fill", "#E3F2FD");
+                map.setAttribute("stroke", "#1E88E5");
+                
+                // Add districts with varying colors based on cultural facility density
+                const districts = [
+                    {name: "상당구", x: 50, y: 50, width: 200, height: 100, fill: "#2CA25F"}, // High density
+                    {name: "서원구", x: 250, y: 50, width: 200, height: 100, fill: "#66C2A4"}, // Medium-high density
+                    {name: "청원구", x: 50, y: 170, width: 200, height: 100, fill: "#B2E2E2"}, // Low density
+                    {name: "흥덕구", x: 250, y: 170, width: 200, height: 100, fill: "#EDF8FB"}  // Very low density
+                ];
+                
+                districts.forEach(d => {
+                    const district = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                    district.setAttribute("x", d.x);
+                    district.setAttribute("y", d.y);
+                    district.setAttribute("width", d.width);
+                    district.setAttribute("height", d.height);
+                    district.setAttribute("fill", d.fill);
+                    district.setAttribute("stroke", "#fff");
+                    district.setAttribute("class", "district");
+                    
+                    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    text.setAttribute("x", d.x + d.width/2);
+                    text.setAttribute("y", d.y + d.height/2);
+                    text.setAttribute("text-anchor", "middle");
+                    text.setAttribute("dominant-baseline", "middle");
+                    text.setAttribute("font-size", "14");
+                    text.setAttribute("font-weight", "bold");
+                    text.setAttribute("fill", d.fill === "#2CA25F" ? "#fff" : "#000");
+                    text.textContent = d.name;
+                    
+                    svg.appendChild(district);
+                    svg.appendChild(text);
+                });
+                
+                // Add density labels
+                const densityLabels = [
+                    {text: "중앙동: 3.2개", x: 150, y: 80, align: "middle"},
+                    {text: "사창동: 2.1개", x: 350, y: 80, align: "middle"},
+                    {text: "오송읍: 0.7개", x: 150, y: 200, align: "middle"},
+                    {text: "가경동: 1.2개", x: 350, y: 200, align: "middle"}
+                ];
+                
+                densityLabels.forEach(l => {
+                    const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    label.setAttribute("x", l.x);
+                    label.setAttribute("y", l.y);
+                    label.setAttribute("text-anchor", l.align);
+                    label.setAttribute("font-size", "12");
+                    label.textContent = l.text;
+                    svg.appendChild(label);
+                });
+                
+                culturalFacilitiesMapEl.appendChild(svg);
+            }
+        });
+    </script>
+</body>
+</html>
+}
