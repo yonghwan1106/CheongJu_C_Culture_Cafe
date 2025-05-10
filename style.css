@@ -1,0 +1,447 @@
+/* 기대효과 페이지 스타일 */
+
+/* 공통 섹션 스타일 */
+section {
+    padding: 4rem 0;
+}
+
+section:nth-child(even) {
+    background-color: #FFF8E1;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+section h2 {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 2rem;
+    color: #8B4513;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 2rem -1rem;
+}
+
+.col {
+    flex: 1;
+    padding: 0 1rem;
+    min-width: 300px;
+}
+
+@media (max-width: 768px) {
+    .col {
+        flex: 100%;
+        margin-bottom: 2rem;
+    }
+}
+
+/* 차트 컨테이너 */
+.chart-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.chart-container h3 {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 1.25rem;
+    color: #333;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.chart-caption {
+    font-size: 0.9rem;
+    color: #666;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+/* 데이터 카드 */
+.data-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.data-card h3 {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 1.25rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+/* 비교 컴포넌트 */
+.comparison {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.before, .after {
+    flex: 1;
+    text-align: center;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.before {
+    background-color: rgba(30, 136, 229, 0.1);
+}
+
+.after {
+    background-color: rgba(255, 87, 34, 0.1);
+}
+
+.arrow, .equals {
+    font-size: 1.5rem;
+    color: #666;
+    margin: 0 1rem;
+}
+
+.label {
+    display: block;
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.description {
+    display: block;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+/* 통계 컨테이너 */
+.stats-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin: 2rem 0;
+}
+
+.stats-container.vertical {
+    flex-direction: column;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1rem;
+    min-width: 150px;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #FF5722;
+    margin-bottom: 0.5rem;
+}
+
+.stat-text {
+    display: block;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* 커뮤니티 카드 */
+.social-impact-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin: 2rem 0;
+}
+
+.impact-card {
+    flex: 1;
+    min-width: 250px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+    margin: 0.5rem;
+    text-align: center;
+}
+
+.impact-card .icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 1rem;
+}
+
+.impact-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: #8B4513;
+}
+
+.impact-card ul {
+    text-align: left;
+    padding-left: 1.5rem;
+}
+
+.impact-card li {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+/* 문화 민주주의 모델 */
+.model-diagram {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 600px;
+    margin: 2rem auto;
+}
+
+.model-step {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 1rem;
+}
+
+.model-step .icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1E88E5;
+    color: white;
+    font-weight: bold;
+    border-radius: 50%;
+    margin-right: 1rem;
+}
+
+.model-step .content {
+    flex: 1;
+}
+
+.model-step h4 {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+    color: #333;
+}
+
+.model-step p {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* 유연성 차트 */
+.flexibility-chart {
+    margin-top: 2rem;
+}
+
+.chart-item {
+    margin-bottom: 1.5rem;
+}
+
+.chart-bar {
+    height: 40px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    margin: 0.5rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.bar-before, .bar-after {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: white;
+}
+
+.bar-before {
+    left: 0;
+    width: 100%;
+    background-color: #1E88E5;
+}
+
+.bar-after {
+    left: 0;
+    background-color: #FF5722;
+}
+
+/* 거버넌스 단계 */
+.governance-stages {
+    margin-top: 2rem;
+}
+
+.gov-stage {
+    margin-bottom: 1.5rem;
+}
+
+.gov-stage .year {
+    display: inline-block;
+    background-color: #1E88E5;
+    color: white;
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    margin-right: 0.5rem;
+}
+
+.progress-bar {
+    height: 30px;
+    border-radius: 4px;
+    margin: 0.5rem 0;
+    display: flex;
+    overflow: hidden;
+}
+
+.gov, .private {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: white;
+}
+
+.gov {
+    background-color: #1E88E5;
+}
+
+.private {
+    background-color: #FF5722;
+}
+
+.caption {
+    font-size: 0.8rem;
+    color: #666;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+/* 선순환 문화생태계 */
+.stages {
+    margin-top: 2rem;
+}
+
+.stage {
+    background-color: #1E88E5;
+    color: white;
+    padding: 1rem;
+    border-radius: 4px;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.arrow {
+    text-align: center;
+    color: #666;
+    font-size: 1.5rem;
+    margin: 0.5rem 0;
+}
+
+/* CTA 섹션 */
+.cta-section {
+    background-color: #8B4513;
+    padding: 4rem 0;
+    text-align: center;
+    color: white;
+}
+
+.cta-content h2 {
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.cta-content p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btn-primary {
+    display: inline-block;
+    background-color: #FF5722;
+    color: white;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 0.75rem 2rem;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #E64A19;
+}
+
+/* 비용 비교 */
+.cost-comparison {
+    margin-top: 2rem;
+    background-color: #f9f9f9;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.cost-comparison p {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.cost-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.cost-item:last-child {
+    border-bottom: none;
+}
+
+.cost-item .saving {
+    color: #FF5722;
+    font-weight: 500;
+    font-size: 0.8rem;
+}
+
+/* 데이터 아이템 */
+.data-item {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.data-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
